@@ -30,8 +30,6 @@
 </template>
 
 <script>
-import 'simple-line-icons/css/simple-line-icons.css'
-
 const MenuConfig = [
   {
     title: '控制面板',
@@ -86,6 +84,4 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

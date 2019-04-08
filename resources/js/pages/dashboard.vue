@@ -1,141 +1,149 @@
 <template>
-  <div class="main-container main-with-padding">
-    <el-row :gutter="12">
-      <el-col :span="8">
-        <el-card shadow="always">
-          用户总数 {{ stats.totalAddressedUserCount }} /
-          {{ stats.totalUserCount }}
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card shadow="always">
-          今日新增 {{ stats.todayAddressedUserCount }} /
-          {{ stats.todayUserCount }}
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card shadow="always">
-          留言数 {{ messagesCount }}
-        </el-card>
-      </el-col>
-    </el-row>
+  <div class="">
+    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">GH-DASHBOARD</a>
+    </nav>
+    <div class="container-fluid content-container">
+      <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link active" href="#">
+                  Dashboard <span class="sr-only">(current)</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  Notifications
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  Wakatime
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+          <div class="row">
+            <div class="card-deck col-12 mb-4">
+              <div class="card shadow">
+                <div class="card-body">
+                  <span class="title">Total Stars</span>
+                  <h3>{{ totalStars }}</h3>
+                </div>
+              </div>
+              <div class="card shadow">
+                <div class="card-body">
+                  stars
+                </div>
+              </div>
+              <div class="card shadow">
+                <div class="card-body">
+                  stars
+                </div>
+              </div>
+            </div>
+          </div>
 
-    <el-row>
-      <el-col :span="12">
-        <div class="echarts" id="pie-charts" />
-      </el-col>
-      <el-col :span="12" />
-    </el-row>
+          <div class="row">
+            <div class="col-6">
+              <div
+                class="card"
+                v-for="notification in notifications"
+                :key="notification.id"
+              >
+                <div>{{ notification.subject.title }}</div>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="table-responsive">
+                <table class="table table-striped table-sm table-repos">
+                  <thead>
+                    <tr>
+                      <td>#</td>
+                      <td>Name</td>
+                      <td>Stars</td>
+                      <td>Forks</td>
+                      <td>Watchers</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(repo, index) in repos" :key="index">
+                      <td>{{ index + 1 }}</td>
+                      <td>{{ repo.name }}</td>
+                      <td>{{ repo.stargazers_count }}</td>
+                      <td>{{ repo.forks_count }}</td>
+                      <td>{{ repo.watchers_count }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-// import Echarts from 'echarts'
+import _ from 'lodash'
+import Octokit from '@octokit/rest'
 
 export default {
   data () {
     return {
-      stats: {},
-      messagesCount: 0,
+      repos: [],
+      notifications: [],
     }
   },
 
+  computed: {
+    totalStars () {
+      return _.sumBy(this.repos, 'stargazers_count')
+    },
+  },
+
   mounted () {
-    this.getStats()
-    this.getMessagesCount()
-    // this.getUsersIncrement()
+    const octokit = new Octokit({
+      // log: console,
+      auth: process.env.MIX_GITHUB_OAUTH_TOKEN,
+    })
+
+    octokit.repos
+      .listForUser({
+        username: 'tianyong90',
+        type: 'owner',
+      })
+      .then(({ data }) => {
+        this.repos = _.orderBy(
+          data,
+          ['stargazers_count', 'forks_count'],
+          'desc'
+        )
+      })
+
+    octokit.activity.listNotifications().then(({ data }) => {
+      this.notifications = data
+    })
   },
 
-  methods: {
-    getStats () {
-      this.axios
-        .get('stats')
-        .then(response => {
-          this.stats = response.data
-
-          const onlyResigtered = this.stats.totalUserCount - this.stats.totalVerifiedUserCount
-          const onlyVerified = this.stats.totalVerifiedUserCount - this.stats.totalAddressedUserCount
-          const onlyAddressedUserCount = this.stats.totalAddressedUserCount
-
-          // let myChart = Echarts.init(document.getElementById('pie-charts'))
-          //
-          // const option = {
-          //   title: {
-          //     text: '各阶段用户比例',
-          //     x: 'center',
-          //   },
-          //   tooltip: {
-          //     trigger: 'item',
-          //     formatter: '{b} : ({d}%)',
-          //   },
-          //   legend: {
-          //     bottom: 0,
-          //   },
-          //   series: [
-          //     {
-          //       name: 'Amount',
-          //       type: 'pie',
-          //       center: ['50%', '50%'],
-          //       label: {
-          //         show: true,
-          //       },
-          //       data: [
-          //         {
-          //           name: '仅注册',
-          //           value: onlyResigtered,
-          //         },
-          //         {
-          //           name: '已验证邮箱',
-          //           value: onlyVerified,
-          //         },
-          //         {
-          //           name: '已设置钱包',
-          //           value: onlyAddressedUserCount,
-          //         },
-          //       ],
-          //       itemStyle: {
-          //         emphasis: {
-          //           shadowBlur: 10,
-          //           shadowOffsetX: 0,
-          //           shadowColor: 'rgba(0, 0, 0, 0.5)',
-          //         },
-          //       },
-          //     },
-          //   ],
-          // }
-          //
-          // myChart.setOption(option)
-        })
-        .catch(() => {
-          this.roleUsersLoading = false
-        })
-    },
-
-    getMessagesCount () {
-      this.axios
-        .get('stats/messages-count')
-        .then(response => {
-          this.messagesCount = response.data.messatesCount
-        })
-        .catch(() => {
-          this.roleUsersLoading = false
-        })
-    },
-  },
+  methods: {},
 }
 </script>
 
 <style scoped lang="scss">
-.main-container {
-  display: block;
-  padding: 20px;
+.content-container {
+  margin-top: 50px;
 }
 
-.echarts {
+.table-repos {
   display: block;
-  margin-top: 20px;
-  overflow: hidden;
-  background: #fff;
+  overflow: scroll;
   width: 100%;
   height: 500px;
 }
