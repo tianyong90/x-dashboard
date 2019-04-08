@@ -5,28 +5,7 @@
     </nav>
     <div class="container-fluid content-container">
       <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-          <div class="sidebar-sticky">
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <a class="nav-link active" href="#">
-                  Dashboard <span class="sr-only">(current)</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  Notifications
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  Wakatime
-                </a>
-              </li>
-            </ul>
-          </div>
-        </nav>
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <main role="main" class="col-md-12 px-4">
           <div class="row">
             <div class="card-deck col-12 mb-4">
               <div class="card shadow">
@@ -37,12 +16,13 @@
               </div>
               <div class="card shadow">
                 <div class="card-body">
-                  stars
+                  提交次数热力图
                 </div>
               </div>
               <div class="card shadow">
                 <div class="card-body">
-                  stars
+                  {{ stats.data && stats.data.human_readable_total }}
+                  <div class="chart" id="wakatime_chart" />
                 </div>
               </div>
             </div>
@@ -93,12 +73,14 @@
 <script>
 import _ from 'lodash'
 import Octokit from '@octokit/rest'
+import G2 from '@antv/g2'
 
 export default {
   data () {
     return {
       repos: [],
       notifications: [],
+      stats: {},
     }
   },
 
@@ -129,6 +111,20 @@ export default {
 
     octokit.activity.listNotifications().then(({ data }) => {
       this.notifications = data
+    })
+
+    // TODO
+    // octokit.repos.getCommitActivityStats()
+    //   .then(res => {
+    //     console.log(res)
+    // })
+
+    // 初始化 wakatime 曲线图
+
+    this.axios.get('wakatime/stats').then(({ data }) => {
+      this.stats = data
+
+      console.log(this.stats)
     })
   },
 
