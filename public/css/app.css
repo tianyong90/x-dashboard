@@ -353,6 +353,7 @@ template {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+  background-color: #eee;
 }
 
 .fade-enter-active,
@@ -365,12 +366,13 @@ template {
   opacity: 0;
 }
 
-#top-menu {
-  height: 60px;
+.topmenu {
+  height: 50px;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 200;
+  color: #fff;
 }
 

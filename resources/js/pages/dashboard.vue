@@ -1,20 +1,20 @@
 <template>
   <div class="main-container">
     <el-row :gutter="12">
-      <el-col :spab="8">
+      <el-col :span="8">
         <el-card shadow="always">
           <span class="title">Total Stars</span>
           <h3>{{ totalStars }}</h3>
         </el-card>
       </el-col>
 
-      <el-col :spab="8">
+      <el-col :span="8">
         <el-card shadow="always">
           提交次数热力图
         </el-card>
       </el-col>
 
-      <el-col :spab="8">
+      <el-col :span="8">
         <el-card shadow="always">
           {{ stats.data && stats.data.human_readable_total }}
           <div class="chart" id="wakatime_chart" />
@@ -22,19 +22,19 @@
       </el-col>
     </el-row>
 
-    <el-row :gutter="20">
-      <el-col :span="12">
+    <el-row :gutter="12">
+      <el-col :span="16">
         <ul>
           <li v-for="notification in notifications" :key="notification.id">
             <div>{{ notification.subject.title }}</div>
           </li>
         </ul>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="8">
         <el-table :data="repos"
                   stripe
                   border
-                  height="300"
+                  height="500"
                   style="width: 100%"
         >
           <el-table-column prop="name" label="Name" width="120" />
@@ -99,15 +99,19 @@ export default {
     // 初始化 wakatime 曲线图
 
     // TODO:
-    // this.axios.get('wakatime/stats').then(({ data }) => {
-    //   this.stats = data
-    //
-    //   console.log(this.stats)
-    // })
+    this.axios.get('wakatime/stats').then(({ data }) => {
+      this.stats = data
+
+      console.log(this.stats)
+    })
   },
 
   methods: {},
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.el-card {
+  height: 150px;
+}
+</style>

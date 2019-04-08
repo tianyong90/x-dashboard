@@ -22,4 +22,13 @@ export default {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.logo {
+  display: flex;
+  color: #fff;
+  text-decoration: none;
+  background-color: #ff0;
+  line-height: 100%;
+  flex: 0 1 40px;
+}
+</style>
