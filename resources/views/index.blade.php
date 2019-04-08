@@ -17,7 +17,16 @@
 </head>
 <body>
 <div id="app">
-    <router-view></router-view>
+    <el-container>
+        <el-header>
+            <topmenu></topmenu>
+        </el-header>
+        <el-main>
+            <transition name="slide-fade" mode="out-in">
+                <router-view></router-view>
+            </transition>
+        </el-main>
+    </el-container>
 </div>
 
 {{--只有在不使用 hmr 的时候使用代码分割--}}

@@ -9,51 +9,17 @@
     active-text-color="#ffd04b"
   >
     <router-link class="logo" to="/">
-      VISION NETWORK
+      GH-DASHBOARD
     </router-link>
-
-    <el-button class="btn-logout"
-               size="small"
-               type="primary"
-               @click="logout"
-    >
-      退出登录
-    </el-button>
   </el-menu>
 </template>
 
 <script>
-import config from '../config'
-import { mapState, mapActions } from 'vuex'
-
 export default {
-  computed: {
-    ...mapState({
-      user: state => state.user,
-    }),
-  },
+  computed: {},
 
-  methods: {
-    ...mapActions(['clearUserInSessionStorage']),
-
-    // 退出登录
-    logout () {
-      this.axios
-        .post('logout')
-        .then(() => {
-          window.localStorage.removeItem(config.authTokenKey)
-          this.clearUserInSessionStorage({})
-
-          this.$router.replace('/login')
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    },
-  },
+  methods: {},
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

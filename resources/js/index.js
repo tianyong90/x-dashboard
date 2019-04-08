@@ -7,13 +7,14 @@ import routes from './routes.js'
 import config from './config' // 配置
 import { mapState } from 'vuex'
 import Topmenu from './components/topmenu.vue'
-import Sidebar from './components/sidebar.vue'
+import ElementUI from 'element-ui'
 
 Vue.config.productionTip = false
 
 axios.defaults.baseURL = config.apiRoot
 axios.defaults.timeout = config.timeout
 
+Vue.use(ElementUI)
 Vue.use(VueRouter)
 Vue.use(VueAxios, axios)
 
@@ -92,7 +93,6 @@ const app = new Vue({
 
   components: {
     topmenu: Topmenu,
-    sidebar: Sidebar,
   },
 
   created () {
