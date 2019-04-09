@@ -61039,6 +61039,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _octokit_rest__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_octokit_rest__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _antv_g2__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @antv/g2 */ "./node_modules/@antv/g2/build/g2.js");
 /* harmony import */ var _antv_g2__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_antv_g2__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
 //
 //
 //
@@ -61083,11 +61085,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
+
 
 
 
@@ -61125,10 +61123,158 @@ __webpack_require__.r(__webpack_exports__);
     this.axios.get('wakatime/stats').then(function (_ref2) {
       var data = _ref2.data;
       _this.stats = data;
-    }); // WAKATIME 最近 7 天统计
-
-    this.axios.get('wakatime/summaries').then(function (_ref3) {
+    });
+    _antv_g2__WEBPACK_IMPORTED_MODULE_2__["Shape"].registerShape('polygon', 'boundary-polygon', {
+      draw: function draw(cfg, container) {
+        if (!_antv_g2__WEBPACK_IMPORTED_MODULE_2__["Util"].isEmpty(cfg.points)) {
+          var attrs = {
+            stroke: '#fff',
+            lineWidth: 1,
+            fill: cfg.color,
+            fillOpacity: cfg.opacity
+          };
+          var points = cfg.points;
+          var path = [['M', points[0].x, points[0].y], ['L', points[1].x, points[1].y], ['L', points[2].x, points[2].y], ['L', points[3].x, points[3].y], ['Z']];
+          attrs.path = this.parsePath(path);
+          var polygon = container.addShape('path', {
+            attrs: attrs
+          });
+          container.sort();
+          return polygon;
+        }
+      }
+    });
+    axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('github/calendar').then(function (_ref3) {
       var data = _ref3.data;
+      console.log(data);
+      var calendarChart = new _antv_g2__WEBPACK_IMPORTED_MODULE_2___default.a.Chart({
+        container: 'calendar',
+        forceFit: true,
+        height: 150,
+        padding: [0, 0, 30, 20]
+      });
+      calendarChart.source(data, {
+        day: {
+          type: 'cat',
+          values: ['日', '一', '二', '三', '四', '五', '六']
+        },
+        week: {
+          type: 'cat'
+        },
+        commits: {
+          sync: true
+        }
+      });
+      calendarChart.axis('week', {
+        position: 'top',
+        tickLine: null,
+        line: null,
+        label: {
+          offset: 12,
+          textStyle: {
+            fontSize: 12,
+            fill: '#666',
+            textBaseline: 'top'
+          },
+          formatter: function formatter(val) {
+            if (val === '2') {
+              return 'MAY';
+            } else if (val === '6') {
+              return 'JUN';
+            } else if (val === '10') {
+              return 'JUL';
+            } else if (val === '15') {
+              return 'AUG';
+            } else if (val === '19') {
+              return 'SEP';
+            } else if (val === '24') {
+              return 'OCT';
+            }
+
+            return '';
+          }
+        }
+      });
+      calendarChart.axis('day', {
+        grid: null
+      });
+      calendarChart.legend(false);
+      calendarChart.tooltip({
+        title: 'date'
+      });
+      calendarChart.coord().reflect('y');
+      calendarChart.polygon().position('week*day*date').color('count', '#BAE7FF-#1890FF-#0050B3').shape('boundary-polygon');
+      calendarChart.render();
+    }); // axios.get('http://localhost:3000/js/data.json').then(({ data }) => {
+    //   console.log(data)
+    //
+    //   var calendarChart = new G2.Chart({
+    //     container: 'calendar',
+    //     forceFit: true,
+    //     height: 150,
+    //     padding: [0, 0, 30, 20]
+    //   })
+    //   calendarChart.source(data, {
+    //     day: {
+    //       type: 'cat',
+    //       values: ['日', '一', '二', '三', '四', '五', '六']
+    //     },
+    //     week: {
+    //       type: 'cat'
+    //     },
+    //     commits: {
+    //       sync: true
+    //     }
+    //   })
+    //
+    //   calendarChart.axis('week', {
+    //     position: 'top',
+    //     tickLine: null,
+    //     line: null,
+    //     label: {
+    //       offset: 12,
+    //       textStyle: {
+    //         fontSize: 12,
+    //         fill: '#666',
+    //         textBaseline: 'top'
+    //       },
+    //       formatter: function formatter (val) {
+    //         if (val === '2') {
+    //           return 'MAY'
+    //         } else if (val === '6') {
+    //           return 'JUN'
+    //         } else if (val === '10') {
+    //           return 'JUL'
+    //         } else if (val === '15') {
+    //           return 'AUG'
+    //         } else if (val === '19') {
+    //           return 'SEP'
+    //         } else if (val === '24') {
+    //           return 'OCT'
+    //         }
+    //         return ''
+    //       }
+    //     }
+    //   })
+    //   calendarChart.axis('day', {
+    //     grid: null
+    //   })
+    //   calendarChart.legend(false)
+    //   calendarChart.tooltip({
+    //     title: 'date'
+    //   })
+    //   calendarChart.coord().reflect('y')
+    //   calendarChart
+    //     .polygon()
+    //     .position('week*day*date')
+    //     .color('commits', '#BAE7FF-#1890FF-#0050B3')
+    //     .shape('boundary-polygon')
+    //   calendarChart.render()
+    // })
+    // WAKATIME 最近 7 天统计
+
+    this.axios.get('wakatime/summaries').then(function (_ref4) {
+      var data = _ref4.data;
       var sourceData = data.data.map(function (item) {
         return {
           date: item.range.date,
@@ -135120,7 +135266,7 @@ var render = function() {
             { attrs: { span: 8 } },
             [
               _c("el-card", { attrs: { shadow: "always" } }, [
-                _vm._v("\n        提交次数热力图\n      ")
+                _c("div", { staticClass: "chart", attrs: { id: "calendar" } })
               ])
             ],
             1
@@ -135132,11 +135278,11 @@ var render = function() {
             [
               _c("el-card", { attrs: { shadow: "always" } }, [
                 _vm._v(
-                  "\n        " +
+                  "\n                " +
                     _vm._s(
                       _vm.stats.data && _vm.stats.data.human_readable_total
                     ) +
-                    "\n        "
+                    "\n                "
                 ),
                 _c("div", {
                   staticClass: "chart",

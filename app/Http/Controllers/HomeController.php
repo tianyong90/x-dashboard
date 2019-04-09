@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use GuzzleHttp\Client as Guzzle;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -12,11 +11,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // TODO
-        $response = (new Guzzle())->get('https://github.com/users/tianyong90/contributions');
-
-        dd($response->getBody()->getContents());
-
         return view('index');
     }
 }

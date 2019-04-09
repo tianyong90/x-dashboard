@@ -10,7 +10,7 @@
 
       <el-col :span="8">
         <el-card shadow="always">
-          提交次数热力图
+          <div class="chart" id="calendar" />
         </el-card>
       </el-col>
 
@@ -50,7 +50,8 @@
 <script>
 import _ from 'lodash'
 import Octokit from '@octokit/rest'
-import G2 from '@antv/g2'
+import G2, { Shape, Util } from '@antv/g2'
+import axios from 'axios'
 
 export default {
   data () {
@@ -94,6 +95,169 @@ export default {
     this.axios.get('wakatime/stats').then(({ data }) => {
       this.stats = data
     })
+
+    Shape.registerShape('polygon', 'boundary-polygon', {
+      draw: function draw (cfg, container) {
+        if (!Util.isEmpty(cfg.points)) {
+          var attrs = {
+            stroke: '#fff',
+            lineWidth: 1,
+            fill: cfg.color,
+            fillOpacity: cfg.opacity,
+          }
+          var points = cfg.points
+          var path = [
+            ['M', points[0].x, points[0].y],
+            ['L', points[1].x, points[1].y],
+            ['L', points[2].x, points[2].y],
+            ['L', points[3].x, points[3].y],
+            ['Z'],
+          ]
+
+          attrs.path = this.parsePath(path)
+          var polygon = container.addShape('path', {
+            attrs: attrs,
+          })
+
+          container.sort()
+          return polygon
+        }
+      },
+    })
+
+    axios.get('github/calendar').then(({ data }) => {
+      console.log(data)
+
+      var calendarChart = new G2.Chart({
+        container: 'calendar',
+        forceFit: true,
+        height: 150,
+        padding: [0, 0, 30, 20],
+      })
+      calendarChart.source(data, {
+        day: {
+          type: 'cat',
+          values: ['日', '一', '二', '三', '四', '五', '六'],
+        },
+        week: {
+          type: 'cat',
+        },
+        commits: {
+          sync: true,
+        },
+      })
+
+      calendarChart.axis('week', {
+        position: 'top',
+        tickLine: null,
+        line: null,
+        label: {
+          offset: 12,
+          textStyle: {
+            fontSize: 12,
+            fill: '#666',
+            textBaseline: 'top',
+          },
+          formatter: function formatter (val) {
+            if (val === '2') {
+              return 'MAY'
+            } else if (val === '6') {
+              return 'JUN'
+            } else if (val === '10') {
+              return 'JUL'
+            } else if (val === '15') {
+              return 'AUG'
+            } else if (val === '19') {
+              return 'SEP'
+            } else if (val === '24') {
+              return 'OCT'
+            }
+            return ''
+          },
+        },
+      })
+      calendarChart.axis('day', {
+        grid: null,
+      })
+      calendarChart.legend(false)
+      calendarChart.tooltip({
+        title: 'date',
+      })
+      calendarChart.coord().reflect('y')
+      calendarChart
+        .polygon()
+        .position('week*day*date')
+        .color('count', '#BAE7FF-#1890FF-#0050B3')
+        .shape('boundary-polygon')
+      calendarChart.render()
+    })
+
+    // axios.get('http://localhost:3000/js/data.json').then(({ data }) => {
+    //   console.log(data)
+    //
+    //   var calendarChart = new G2.Chart({
+    //     container: 'calendar',
+    //     forceFit: true,
+    //     height: 150,
+    //     padding: [0, 0, 30, 20]
+    //   })
+    //   calendarChart.source(data, {
+    //     day: {
+    //       type: 'cat',
+    //       values: ['日', '一', '二', '三', '四', '五', '六']
+    //     },
+    //     week: {
+    //       type: 'cat'
+    //     },
+    //     commits: {
+    //       sync: true
+    //     }
+    //   })
+    //
+    //   calendarChart.axis('week', {
+    //     position: 'top',
+    //     tickLine: null,
+    //     line: null,
+    //     label: {
+    //       offset: 12,
+    //       textStyle: {
+    //         fontSize: 12,
+    //         fill: '#666',
+    //         textBaseline: 'top'
+    //       },
+    //       formatter: function formatter (val) {
+    //         if (val === '2') {
+    //           return 'MAY'
+    //         } else if (val === '6') {
+    //           return 'JUN'
+    //         } else if (val === '10') {
+    //           return 'JUL'
+    //         } else if (val === '15') {
+    //           return 'AUG'
+    //         } else if (val === '19') {
+    //           return 'SEP'
+    //         } else if (val === '24') {
+    //           return 'OCT'
+    //         }
+    //         return ''
+    //       }
+    //     }
+    //   })
+    //   calendarChart.axis('day', {
+    //     grid: null
+    //   })
+    //   calendarChart.legend(false)
+    //   calendarChart.tooltip({
+    //     title: 'date'
+    //   })
+    //   calendarChart.coord().reflect('y')
+    //   calendarChart
+    //     .polygon()
+    //     .position('week*day*date')
+    //     .color('commits', '#BAE7FF-#1890FF-#0050B3')
+    //     .shape('boundary-polygon')
+    //   calendarChart.render()
+    // })
 
     // WAKATIME 最近 7 天统计
     this.axios.get('wakatime/summaries').then(({ data }) => {
