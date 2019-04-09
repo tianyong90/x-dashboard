@@ -17,4 +17,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('wakatime/summaries', 'Api\WakatimeController@summaries');
 Route::get('wakatime/stats', 'Api\WakatimeController@stats');

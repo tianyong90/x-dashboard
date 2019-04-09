@@ -61117,22 +61117,49 @@ __webpack_require__.r(__webpack_exports__);
     }).then(function (_ref) {
       var data = _ref.data;
       _this.repos = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.orderBy(data, ['stargazers_count', 'forks_count'], 'desc');
-    });
-    octokit.activity.listNotifications().then(function (_ref2) {
-      var data = _ref2.data;
-      _this.notifications = data;
-    }); // TODO
-    // octokit.repos.getCommitActivityStats()
-    //   .then(res => {
-    //     console.log(res)
+    }); // octokit.activity.listNotifications().then(({ data }) => {
+    //   this.notifications = data
     // })
-    // 初始化 wakatime 曲线图
-    // TODO:
+    // TODO
 
-    this.axios.get('wakatime/stats').then(function (_ref3) {
-      var data = _ref3.data;
+    octokit.repos.getCodeFrequencyStats().then(function (res) {
+      console.log(res);
+    }); // WAKATIME 7 天分析数据
+
+    this.axios.get('wakatime/stats').then(function (_ref2) {
+      var data = _ref2.data;
       _this.stats = data;
-      console.log(_this.stats);
+    }); // WAKATIME 最近 7 天统计
+
+    this.axios.get('wakatime/summaries').then(function (_ref3) {
+      var data = _ref3.data;
+      var sourceData = data.data.map(function (item) {
+        return {
+          date: item.range.date,
+          totalSeconds: item.grand_total.total_seconds,
+          totalTimeText: item.grand_total.text
+        };
+      });
+      var chart = new _antv_g2__WEBPACK_IMPORTED_MODULE_2___default.a.Chart({
+        container: 'wakatime_chart',
+        forceFit: true,
+        height: 120,
+        padding: [0, 25, 0, 25]
+      });
+      chart.source(sourceData);
+      chart.axis('totalSeconds', false);
+      chart.tooltip({
+        showTitle: true,
+        useHtml: true,
+        itemTpl: '<li data-index={index}>{time}</li>'
+      });
+      chart.interval().position('date*totalSeconds').tooltip('date*totalSeconds*totalTimeText', function (date, totalSeconds, totalTimeText) {
+        return {
+          date: date,
+          time: totalTimeText
+        };
+      });
+      chart.render();
     });
   },
   methods: {}
@@ -63195,7 +63222,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".el-card[data-v-e1aead0a] {\n  height: 150px;\n}", ""]);
+exports.push([module.i, ".el-card[data-v-e1aead0a] {\n  height: 180px;\n}\n.chart[data-v-e1aead0a] {\n  display: block;\n  width: 100%;\n}", ""]);
 
 // exports
 
@@ -135129,7 +135156,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "el-row",
-        { attrs: { gutter: 12 } },
+        { staticStyle: { "margin-top": "20px" }, attrs: { gutter: 12 } },
         [
           _c("el-col", { attrs: { span: 16 } }, [
             _c(

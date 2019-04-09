@@ -22,7 +22,7 @@
       </el-col>
     </el-row>
 
-    <el-row :gutter="12">
+    <el-row :gutter="12" style="margin-top: 20px;">
       <el-col :span="16">
         <ul>
           <li v-for="notification in notifications" :key="notification.id">
@@ -86,23 +86,59 @@ export default {
         )
       })
 
-    octokit.activity.listNotifications().then(({ data }) => {
-      this.notifications = data
-    })
-
-    // TODO
-    // octokit.repos.getCommitActivityStats()
-    //   .then(res => {
-    //     console.log(res)
+    // octokit.activity.listNotifications().then(({ data }) => {
+    //   this.notifications = data
     // })
 
-    // 初始化 wakatime 曲线图
+    // TODO
+    octokit.repos.getCodeFrequencyStats().then(res => {
+      console.log(res)
+    })
 
-    // TODO:
+    // WAKATIME 7 天分析数据
     this.axios.get('wakatime/stats').then(({ data }) => {
       this.stats = data
+    })
 
-      console.log(this.stats)
+    // WAKATIME 最近 7 天统计
+    this.axios.get('wakatime/summaries').then(({ data }) => {
+      const sourceData = data.data.map(item => {
+        return {
+          date: item.range.date,
+          totalSeconds: item.grand_total.total_seconds,
+          totalTimeText: item.grand_total.text,
+        }
+      })
+
+      const chart = new G2.Chart({
+        container: 'wakatime_chart',
+        forceFit: true,
+        height: 120,
+        padding: [0, 25, 0, 25],
+      })
+
+      chart.source(sourceData)
+      chart.axis('totalSeconds', false)
+
+      chart.tooltip({
+        showTitle: true,
+        useHtml: true,
+        itemTpl: '<li data-index={index}>{time}</li>',
+      })
+
+      chart
+        .interval()
+        .position('date*totalSeconds')
+        .tooltip(
+          'date*totalSeconds*totalTimeText',
+          (date, totalSeconds, totalTimeText) => {
+            return {
+              date: date,
+              time: totalTimeText,
+            }
+          }
+        )
+      chart.render()
     })
   },
 
@@ -112,6 +148,11 @@ export default {
 
 <style scoped lang="scss">
 .el-card {
-  height: 150px;
+  height: 180px;
+}
+
+.chart {
+  display: block;
+  width: 100%;
 }
 </style>

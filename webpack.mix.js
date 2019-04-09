@@ -66,7 +66,7 @@ mix.sass('resources/sass/app.scss', 'css')
 // 用了 extract 后 hmr 无法正常使用，所以只要不使用 hmr 的时候使用 extract
 if (!Mix.isUsing('hmr')) {
   // extract vendor
-  mix.extract(['vue', 'axios', 'jquery'])
+  mix.extract(['vue', 'axios'])
 }
 
 // versioning
