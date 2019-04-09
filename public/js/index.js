@@ -61120,11 +61120,7 @@ __webpack_require__.r(__webpack_exports__);
     }); // octokit.activity.listNotifications().then(({ data }) => {
     //   this.notifications = data
     // })
-    // TODO
-
-    octokit.repos.getCodeFrequencyStats().then(function (res) {
-      console.log(res);
-    }); // WAKATIME 7 天分析数据
+    // WAKATIME 7 天分析数据
 
     this.axios.get('wakatime/stats').then(function (_ref2) {
       var data = _ref2.data;

@@ -90,11 +90,6 @@ export default {
     //   this.notifications = data
     // })
 
-    // TODO
-    octokit.repos.getCodeFrequencyStats().then(res => {
-      console.log(res)
-    })
-
     // WAKATIME 7 天分析数据
     this.axios.get('wakatime/stats').then(({ data }) => {
       this.stats = data
