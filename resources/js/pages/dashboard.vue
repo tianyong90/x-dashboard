@@ -24,19 +24,32 @@
 
     <el-row :gutter="12" style="margin-top: 20px;">
       <el-col :span="9">
-        <div class="notifications-panel">
-          <ul>
-            <li v-for="notification in notifications" :key="notification.id">
-              <div>{{ notification.subject.title }}</div>
-            </li>
-          </ul>
+        <div class="notifications">
+          <div
+            v-for="(notificationGroup, groupName, index) in notifications"
+            :key="index"
+            class="notification-group-panel"
+          >
+            <div class="group-title">
+              {{ groupName }}
+            </div>
+            <ul>
+              <li
+                v-for="notification in notificationGroup"
+                :key="notification.id"
+              >
+                <span>{{ notification.subject.type }}</span>
+                <span>{{ notification.subject.title }}</span>
+              </li>
+            </ul>
+          </div>
         </div>
       </el-col>
       <el-col :span="9">
         <div class="notifications-panel">
           <ul>
             <li v-for="notification in notifications" :key="notification.id">
-              <div>{{ notification.subject.title }}</div>
+              <div>hello world</div>
             </li>
           </ul>
         </div>
@@ -59,17 +72,18 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
 import _ from 'lodash'
 import Octokit from '@octokit/rest'
 import G2, { Shape, Util } from '@antv/g2'
 import axios from 'axios'
 import numeral from 'numeral'
 
-export default {
+export default Vue.extend({
   data () {
     return {
       repos: [],
-      notifications: [],
+      notifications: {},
       totalTime: '',
     }
   },
@@ -101,18 +115,10 @@ export default {
       })
 
     octokit.activity.listNotifications().then(({ data }) => {
-      this.notifications = data
+      this.notifications = _.groupBy(data, item => {
+        return item.repository.full_name
+      })
     })
-
-    this.axios
-      .get('https://github.com/timeline', {
-        headers: {
-          Accept: 'applicatgion/atom+xml',
-        },
-      })
-      .then(res => {
-        console.log(res)
-      })
 
     Shape.registerShape('polygon', 'boundary-polygon', {
       draw: function draw (cfg, container) {
@@ -213,7 +219,9 @@ export default {
       calendarChart
         .polygon()
         .position('week*day*date')
-        .color('count', '#BAE7FF-#1890FF-#0050B3')
+        .color('fill', (fill: string) => {
+          return fill
+        })
         .shape('boundary-polygon')
       calendarChart.render()
     })
@@ -265,7 +273,7 @@ export default {
   },
 
   methods: {},
-}
+})
 </script>
 
 <style scoped lang="scss">
@@ -278,16 +286,33 @@ export default {
   width: 100%;
 }
 
-.notifications-panel {
+.notifications {
   display: block;
-  background-color: #fff;
-  padding: 1rem;
 
-  ul {
-    list-style: none;
+  .notification-group-panel {
     display: block;
-    padding: 0;
-    margin: 0;
+    overflow: hidden;
+    background-color: #fff;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+
+    .group-title {
+      display: flex;
+      background-color: #f3f3f3;
+      padding: 0.5rem 1rem;
+      border-bottom: 1px solid #ddd;
+    }
+
+    ul,
+    li {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      display: flex;
+      padding: 0.25rem 1rem;
+    }
   }
 }
 </style>

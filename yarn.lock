@@ -817,6 +817,11 @@
   resolved "http://registry.npm.taobao.org/@types/node/download/@types/node-11.13.2.tgz#dc85dde46aa8740bb4aed54b8104250f8f849503"
   integrity sha1-3IXd5GqodAu0rtVLgQQlD4+ElQM=
 
+"@types/numeral@^0.0.25":
+  version "0.0.25"
+  resolved "http://registry.npm.taobao.org/@types/numeral/download/@types/numeral-0.0.25.tgz#b6f55062827a4787fe4ab151cf3412a468e65271"
+  integrity sha1-tvVQYoJ6R4f+SrFRzzQSpGjmUnE=
+
 "@types/q@^1.5.1":
   version "1.5.2"
   resolved "http://registry.npm.taobao.org/@types/q/download/@types/q-1.5.2.tgz#690a1475b84f2a884fd07cd797c00f5f31356ea8"

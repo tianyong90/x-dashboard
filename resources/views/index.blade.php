@@ -18,7 +18,7 @@
 <body>
 <div id="app">
     <el-container>
-        <el-header>
+        <el-header height="40px">
             <topmenu></topmenu>
         </el-header>
         <el-main>

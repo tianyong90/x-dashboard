@@ -8,13 +8,18 @@
     text-color="#fff"
     active-text-color="#ffd04b"
   >
-    <router-link class="logo" to="/">
-      GH-DASHBOARD
-    </router-link>
+    <el-row>
+      <el-col :span="8">
+        <router-link class="logo" to="/">
+          X-DASHBOARD
+        </router-link>
+      </el-col>
+      <el-col :span="16" />
+    </el-row>
   </el-menu>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   computed: {},
 
@@ -27,8 +32,9 @@ export default {
   display: flex;
   color: #fff;
   text-decoration: none;
-  background-color: #ff0;
-  line-height: 100%;
   flex: 0 1 40px;
+  height: 40px;
+  line-height: 40px;
+  padding-left: 1em;
 }
 </style>
