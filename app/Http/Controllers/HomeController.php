@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use GitHub;
 
 class HomeController extends Controller
 {
@@ -11,6 +12,10 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $orgs = GitHub::repo();
+
+        dd($orgs);
+
         return view('index');
     }
 }

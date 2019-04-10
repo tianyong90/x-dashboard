@@ -103,9 +103,16 @@ export default {
     octokit.activity.listNotifications().then(({ data }) => {
       this.notifications = data
     })
-    octokit.activity.listFeeds().then(({ data }) => {
-      console.log(data)
-    })
+
+    this.axios
+      .get('https://github.com/timeline', {
+        headers: {
+          Accept: 'applicatgion/atom+xml',
+        },
+      })
+      .then(res => {
+        console.log(res)
+      })
 
     Shape.registerShape('polygon', 'boundary-polygon', {
       draw: function draw (cfg, container) {
