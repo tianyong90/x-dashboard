@@ -16,7 +16,7 @@
 
       <el-col :span="8">
         <el-card shadow="always">
-          {{ stats.data && stats.data.human_readable_total }}
+          {{ totalTime }}
           <div class="chart" id="wakatime_chart" />
         </el-card>
       </el-col>
@@ -52,13 +52,14 @@ import _ from 'lodash'
 import Octokit from '@octokit/rest'
 import G2, { Shape, Util } from '@antv/g2'
 import axios from 'axios'
+import numeral from 'numeral'
 
 export default {
   data () {
     return {
       repos: [],
       notifications: [],
-      stats: {},
+      totalTime: '',
     }
   },
 
@@ -74,39 +75,35 @@ export default {
       auth: process.env.MIX_GITHUB_OAUTH_TOKEN,
     })
 
-    octokit.repos
-      .listForUser({
-        username: 'tianyong90',
-        type: 'owner',
-      })
-      .then(({ data }) => {
-        this.repos = _.orderBy(
-          data,
-          ['stargazers_count', 'forks_count'],
-          'desc'
-        )
-      })
+    // TODO: 暂时注释
+    // octokit.repos
+    //   .listForUser({
+    //     username: 'tianyong90',
+    //     type: 'owner',
+    //   })
+    //   .then(({ data }) => {
+    //     this.repos = _.orderBy(
+    //       data,
+    //       ['stargazers_count', 'forks_count'],
+    //       'desc'
+    //     )
+    //   })
 
     // octokit.activity.listNotifications().then(({ data }) => {
     //   this.notifications = data
     // })
 
-    // WAKATIME 7 天分析数据
-    this.axios.get('wakatime/stats').then(({ data }) => {
-      this.stats = data
-    })
-
     Shape.registerShape('polygon', 'boundary-polygon', {
       draw: function draw (cfg, container) {
         if (!Util.isEmpty(cfg.points)) {
-          var attrs = {
+          let attrs = {
             stroke: '#fff',
             lineWidth: 1,
             fill: cfg.color,
             fillOpacity: cfg.opacity,
           }
-          var points = cfg.points
-          var path = [
+          let points = cfg.points
+          let path = [
             ['M', points[0].x, points[0].y],
             ['L', points[1].x, points[1].y],
             ['L', points[2].x, points[2].y],
@@ -115,7 +112,7 @@ export default {
           ]
 
           attrs.path = this.parsePath(path)
-          var polygon = container.addShape('path', {
+          let polygon = container.addShape('path', {
             attrs: attrs,
           })
 
@@ -128,7 +125,7 @@ export default {
     axios.get('github/calendar').then(({ data }) => {
       console.log(data)
 
-      var calendarChart = new G2.Chart({
+      let calendarChart = new G2.Chart({
         container: 'calendar',
         forceFit: true,
         height: 150,
@@ -195,7 +192,7 @@ export default {
     // axios.get('http://localhost:3000/js/data.json').then(({ data }) => {
     //   console.log(data)
     //
-    //   var calendarChart = new G2.Chart({
+    //   let calendarChart = new G2.Chart({
     //     container: 'calendar',
     //     forceFit: true,
     //     height: 150,
@@ -261,6 +258,10 @@ export default {
 
     // WAKATIME 最近 7 天统计
     this.axios.get('wakatime/summaries').then(({ data }) => {
+      let totalSeconds = _.sumBy(data.data, 'grand_total.total_seconds')
+
+      this.totalTime = numeral(totalSeconds).format('00:00:00')
+
       const sourceData = data.data.map(item => {
         return {
           date: item.range.date,
