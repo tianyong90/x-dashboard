@@ -58,7 +58,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import _ from 'lodash'
 import Octokit from '@octokit/rest'
 import G2, { Shape, Util } from '@antv/g2'
@@ -76,7 +76,7 @@ export default {
 
   computed: {
     // 总 star 数
-    totalStars () {
+    totalStars (): number {
       return _.sumBy(this.repos, 'stargazers_count')
     },
   },

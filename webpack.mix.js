@@ -52,7 +52,33 @@ mix.webpackConfig(webpack => {
           ],
           include: path.resolve(__dirname, 'resources/js'),
         },
+        {
+          test: /\.tsx?$/,
+          use: [
+            {
+              loader: 'cache-loader',
+              options: {
+                cacheDirectory: path.resolve(
+                  './node_modules/.cache/babel-loader'),
+              },
+            },
+            'thread-loader',
+            'babel-loader',
+            {
+              loader: 'ts-loader',
+              options: {
+                appendTsSuffixTo: [/\.vue&/],
+                transpileOnly: true,
+                happyPackMode: true,
+              },
+            },
+          ],
+          include: path.resolve(__dirname, 'resources/js'),
+        },
       ],
+    },
+    resolve: {
+      extensions: ['.js', '.jsx', '.vue', '.ts', '.tsx'],
     },
     stats: 'errors-only',
     plugins: plugins,

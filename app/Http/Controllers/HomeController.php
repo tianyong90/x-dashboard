@@ -12,9 +12,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $orgs = GitHub::repo();
-
-        dd($orgs);
+        // TODO
+//        $orgs = GitHub::repo();
+//
+//        dd($orgs);
 
         return view('index');
     }

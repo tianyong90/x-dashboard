@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import store from './store/index'
-import routes from './routes.js'
+import routes from './routes'
 import config from './config' // 配置
 import { mapState } from 'vuex'
 import Topmenu from './components/topmenu.vue'
