@@ -14,7 +14,13 @@
           X-DASHBOARD
         </router-link>
       </el-col>
-      <el-col :span="16" />
+      <el-col :span="16">
+        <i class="el-icon-star-on" />
+        <i class="el-icon-star-on" />
+        <i class="el-icon-star-on" />
+        <i class="el-icon-star-on" />
+        <i class="el-icon-star-on" />
+      </el-col>
     </el-row>
   </el-menu>
 </template>
