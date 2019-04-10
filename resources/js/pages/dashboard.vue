@@ -1,20 +1,20 @@
 <template>
   <div class="main-container">
     <el-row :gutter="12">
-      <el-col :span="8">
+      <el-col :span="5">
         <el-card shadow="always">
           <span class="title">Total Stars</span>
           <h3>{{ totalStars }}</h3>
         </el-card>
       </el-col>
 
-      <el-col :span="8">
+      <el-col :span="13">
         <el-card shadow="always">
           <div class="chart" id="calendar" />
         </el-card>
       </el-col>
 
-      <el-col :span="8">
+      <el-col :span="6">
         <el-card shadow="always">
           {{ totalTime }}
           <div class="chart" id="wakatime_chart" />
@@ -23,24 +23,35 @@
     </el-row>
 
     <el-row :gutter="12" style="margin-top: 20px;">
-      <el-col :span="16">
-        <ul>
-          <li v-for="notification in notifications" :key="notification.id">
-            <div>{{ notification.subject.title }}</div>
-          </li>
-        </ul>
+      <el-col :span="9">
+        <div class="notifications-panel">
+          <ul>
+            <li v-for="notification in notifications" :key="notification.id">
+              <div>{{ notification.subject.title }}</div>
+            </li>
+          </ul>
+        </div>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="9">
+        <div class="notifications-panel">
+          <ul>
+            <li v-for="notification in notifications" :key="notification.id">
+              <div>{{ notification.subject.title }}</div>
+            </li>
+          </ul>
+        </div>
+      </el-col>
+      <el-col :span="6">
         <el-table :data="repos"
                   stripe
                   border
                   height="500"
                   style="width: 100%"
         >
-          <el-table-column prop="name" label="Name" width="120" />
-          <el-table-column prop="stargazers_count" label="Stars" width="120" />
-          <el-table-column prop="forks_count" label="Forks" width="120" />
-          <el-table-column prop="watchers_count" label="Watchers" width="120" />
+          <el-table-column prop="name" label="Name" />
+          <el-table-column prop="stargazers_count" label="Stars" width="90" />
+          <el-table-column prop="forks_count" label="Forks" width="90" />
+          <el-table-column prop="watchers_count" label="Watchers" width="90" />
         </el-table>
       </el-col>
     </el-row>
@@ -64,6 +75,7 @@ export default {
   },
 
   computed: {
+    // 总 star 数
     totalStars () {
       return _.sumBy(this.repos, 'stargazers_count')
     },
@@ -75,23 +87,25 @@ export default {
       auth: process.env.MIX_GITHUB_OAUTH_TOKEN,
     })
 
-    // TODO: 暂时注释
-    // octokit.repos
-    //   .listForUser({
-    //     username: 'tianyong90',
-    //     type: 'owner',
-    //   })
-    //   .then(({ data }) => {
-    //     this.repos = _.orderBy(
-    //       data,
-    //       ['stargazers_count', 'forks_count'],
-    //       'desc'
-    //     )
-    //   })
+    octokit.repos
+      .listForUser({
+        username: 'tianyong90',
+        type: 'owner',
+      })
+      .then(({ data }) => {
+        this.repos = _.orderBy(
+          data,
+          ['stargazers_count', 'forks_count'],
+          'desc'
+        )
+      })
 
-    // octokit.activity.listNotifications().then(({ data }) => {
-    //   this.notifications = data
-    // })
+    octokit.activity.listNotifications().then(({ data }) => {
+      this.notifications = data
+    })
+    octokit.activity.listFeeds().then(({ data }) => {
+      console.log(data)
+    })
 
     Shape.registerShape('polygon', 'boundary-polygon', {
       draw: function draw (cfg, container) {
@@ -123,8 +137,7 @@ export default {
     })
 
     axios.get('github/calendar').then(({ data }) => {
-      console.log(data)
-
+      // console.log(data)
       let calendarChart = new G2.Chart({
         container: 'calendar',
         forceFit: true,
@@ -139,7 +152,7 @@ export default {
         week: {
           type: 'cat',
         },
-        commits: {
+        count: {
           sync: true,
         },
       })
@@ -156,20 +169,29 @@ export default {
             textBaseline: 'top',
           },
           formatter: function formatter (val) {
-            if (val === '2') {
-              return 'MAY'
-            } else if (val === '6') {
-              return 'JUN'
-            } else if (val === '10') {
-              return 'JUL'
-            } else if (val === '15') {
-              return 'AUG'
-            } else if (val === '19') {
-              return 'SEP'
-            } else if (val === '24') {
-              return 'OCT'
+            const item = _.find(data, o => {
+              // eslint-disable-next-line
+              return o.week == val
+            })
+
+            const ret = Number.parseInt(item.date.split('-')[1])
+
+            // eslint-disable-next-line
+            if (val == 0) {
+              return ret
             }
-            return ''
+
+            const prevItem = _.find(data, o => {
+              // eslint-disable-next-line
+              return o.week == val - 1
+            })
+
+            // 避免重复月份标注
+            if (ret === Number.parseInt(prevItem.date.split('-')[1])) {
+              return ''
+            }
+
+            return ret
           },
         },
       })
@@ -188,73 +210,6 @@ export default {
         .shape('boundary-polygon')
       calendarChart.render()
     })
-
-    // axios.get('http://localhost:3000/js/data.json').then(({ data }) => {
-    //   console.log(data)
-    //
-    //   let calendarChart = new G2.Chart({
-    //     container: 'calendar',
-    //     forceFit: true,
-    //     height: 150,
-    //     padding: [0, 0, 30, 20]
-    //   })
-    //   calendarChart.source(data, {
-    //     day: {
-    //       type: 'cat',
-    //       values: ['日', '一', '二', '三', '四', '五', '六']
-    //     },
-    //     week: {
-    //       type: 'cat'
-    //     },
-    //     commits: {
-    //       sync: true
-    //     }
-    //   })
-    //
-    //   calendarChart.axis('week', {
-    //     position: 'top',
-    //     tickLine: null,
-    //     line: null,
-    //     label: {
-    //       offset: 12,
-    //       textStyle: {
-    //         fontSize: 12,
-    //         fill: '#666',
-    //         textBaseline: 'top'
-    //       },
-    //       formatter: function formatter (val) {
-    //         if (val === '2') {
-    //           return 'MAY'
-    //         } else if (val === '6') {
-    //           return 'JUN'
-    //         } else if (val === '10') {
-    //           return 'JUL'
-    //         } else if (val === '15') {
-    //           return 'AUG'
-    //         } else if (val === '19') {
-    //           return 'SEP'
-    //         } else if (val === '24') {
-    //           return 'OCT'
-    //         }
-    //         return ''
-    //       }
-    //     }
-    //   })
-    //   calendarChart.axis('day', {
-    //     grid: null
-    //   })
-    //   calendarChart.legend(false)
-    //   calendarChart.tooltip({
-    //     title: 'date'
-    //   })
-    //   calendarChart.coord().reflect('y')
-    //   calendarChart
-    //     .polygon()
-    //     .position('week*day*date')
-    //     .color('commits', '#BAE7FF-#1890FF-#0050B3')
-    //     .shape('boundary-polygon')
-    //   calendarChart.render()
-    // })
 
     // WAKATIME 最近 7 天统计
     this.axios.get('wakatime/summaries').then(({ data }) => {
@@ -314,5 +269,18 @@ export default {
 .chart {
   display: block;
   width: 100%;
+}
+
+.notifications-panel {
+  display: block;
+  background-color: #fff;
+  padding: 1rem;
+
+  ul {
+    list-style: none;
+    display: block;
+    padding: 0;
+    margin: 0;
+  }
 }
 </style>

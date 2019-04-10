@@ -95,6 +95,13 @@ Mix.listen('configReady', (webpackConfig) => {
   }
 })
 
+mix.options({
+  hmrOptions: {
+    host: 'gh-dashboard.test',
+    port: 8080,
+  }
+})
+
 // 加 --bs 选项使用 browser-sync
 // 例如： yarn run watch-poll --bs
 if (argv.bs) {

@@ -61092,6 +61092,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -61116,23 +61123,18 @@ __webpack_require__.r(__webpack_exports__);
     var octokit = new _octokit_rest__WEBPACK_IMPORTED_MODULE_1___default.a({
       // log: console,
       auth: "1b3c73c682d2587e23557a1e0c2049bf42eb7930"
-    }); // TODO: 暂时注释
-    // octokit.repos
-    //   .listForUser({
-    //     username: 'tianyong90',
-    //     type: 'owner',
-    //   })
-    //   .then(({ data }) => {
-    //     this.repos = _.orderBy(
-    //       data,
-    //       ['stargazers_count', 'forks_count'],
-    //       'desc'
-    //     )
-    //   })
-    // octokit.activity.listNotifications().then(({ data }) => {
-    //   this.notifications = data
-    // })
-
+    });
+    octokit.repos.listForUser({
+      username: 'tianyong90',
+      type: 'owner'
+    }).then(function (_ref) {
+      var data = _ref.data;
+      _this.repos = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.orderBy(data, ['stargazers_count', 'forks_count'], 'desc');
+    });
+    octokit.activity.listNotifications().then(function (_ref2) {
+      var data = _ref2.data;
+      _this.notifications = data;
+    });
     _antv_g2__WEBPACK_IMPORTED_MODULE_2__["Shape"].registerShape('polygon', 'boundary-polygon', {
       draw: function draw(cfg, container) {
         if (!_antv_g2__WEBPACK_IMPORTED_MODULE_2__["Util"].isEmpty(cfg.points)) {
@@ -61153,9 +61155,9 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     });
-    axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('github/calendar').then(function (_ref) {
-      var data = _ref.data;
-      console.log(data);
+    axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('github/calendar').then(function (_ref3) {
+      var data = _ref3.data;
+      // console.log(data)
       var calendarChart = new _antv_g2__WEBPACK_IMPORTED_MODULE_2___default.a.Chart({
         container: 'calendar',
         forceFit: true,
@@ -61170,7 +61172,7 @@ __webpack_require__.r(__webpack_exports__);
         week: {
           type: 'cat'
         },
-        commits: {
+        count: {
           sync: true
         }
       });
@@ -61186,21 +61188,28 @@ __webpack_require__.r(__webpack_exports__);
             textBaseline: 'top'
           },
           formatter: function formatter(val) {
-            if (val === '2') {
-              return 'MAY';
-            } else if (val === '6') {
-              return 'JUN';
-            } else if (val === '10') {
-              return 'JUL';
-            } else if (val === '15') {
-              return 'AUG';
-            } else if (val === '19') {
-              return 'SEP';
-            } else if (val === '24') {
-              return 'OCT';
+            var item = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.find(data, function (o) {
+              // eslint-disable-next-line
+              return o.week == val;
+            });
+
+            var ret = Number.parseInt(item.date.split('-')[1]);
+
+            if (val == 0) {
+              return ret;
             }
 
-            return '';
+            var prevItem = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.find(data, function (o) {
+              // eslint-disable-next-line
+              return o.week == val - 1;
+            }); // 避免重复月份标注
+
+
+            if (ret === Number.parseInt(prevItem.date.split('-')[1])) {
+              return '';
+            }
+
+            return ret;
           }
         }
       });
@@ -61214,76 +61223,10 @@ __webpack_require__.r(__webpack_exports__);
       calendarChart.coord().reflect('y');
       calendarChart.polygon().position('week*day*date').color('count', '#BAE7FF-#1890FF-#0050B3').shape('boundary-polygon');
       calendarChart.render();
-    }); // axios.get('http://localhost:3000/js/data.json').then(({ data }) => {
-    //   console.log(data)
-    //
-    //   let calendarChart = new G2.Chart({
-    //     container: 'calendar',
-    //     forceFit: true,
-    //     height: 150,
-    //     padding: [0, 0, 30, 20]
-    //   })
-    //   calendarChart.source(data, {
-    //     day: {
-    //       type: 'cat',
-    //       values: ['日', '一', '二', '三', '四', '五', '六']
-    //     },
-    //     week: {
-    //       type: 'cat'
-    //     },
-    //     commits: {
-    //       sync: true
-    //     }
-    //   })
-    //
-    //   calendarChart.axis('week', {
-    //     position: 'top',
-    //     tickLine: null,
-    //     line: null,
-    //     label: {
-    //       offset: 12,
-    //       textStyle: {
-    //         fontSize: 12,
-    //         fill: '#666',
-    //         textBaseline: 'top'
-    //       },
-    //       formatter: function formatter (val) {
-    //         if (val === '2') {
-    //           return 'MAY'
-    //         } else if (val === '6') {
-    //           return 'JUN'
-    //         } else if (val === '10') {
-    //           return 'JUL'
-    //         } else if (val === '15') {
-    //           return 'AUG'
-    //         } else if (val === '19') {
-    //           return 'SEP'
-    //         } else if (val === '24') {
-    //           return 'OCT'
-    //         }
-    //         return ''
-    //       }
-    //     }
-    //   })
-    //   calendarChart.axis('day', {
-    //     grid: null
-    //   })
-    //   calendarChart.legend(false)
-    //   calendarChart.tooltip({
-    //     title: 'date'
-    //   })
-    //   calendarChart.coord().reflect('y')
-    //   calendarChart
-    //     .polygon()
-    //     .position('week*day*date')
-    //     .color('commits', '#BAE7FF-#1890FF-#0050B3')
-    //     .shape('boundary-polygon')
-    //   calendarChart.render()
-    // })
-    // WAKATIME 最近 7 天统计
+    }); // WAKATIME 最近 7 天统计
 
-    this.axios.get('wakatime/summaries').then(function (_ref2) {
-      var data = _ref2.data;
+    this.axios.get('wakatime/summaries').then(function (_ref4) {
+      var data = _ref4.data;
 
       var totalSeconds = lodash__WEBPACK_IMPORTED_MODULE_0___default.a.sumBy(data.data, 'grand_total.total_seconds');
 
@@ -136287,7 +136230,7 @@ var render = function() {
         [
           _c(
             "el-col",
-            { attrs: { span: 8 } },
+            { attrs: { span: 5 } },
             [
               _c("el-card", { attrs: { shadow: "always" } }, [
                 _c("span", { staticClass: "title" }, [_vm._v("Total Stars")]),
@@ -136300,7 +136243,7 @@ var render = function() {
           _vm._v(" "),
           _c(
             "el-col",
-            { attrs: { span: 8 } },
+            { attrs: { span: 13 } },
             [
               _c("el-card", { attrs: { shadow: "always" } }, [
                 _c("div", { staticClass: "chart", attrs: { id: "calendar" } })
@@ -136311,7 +136254,7 @@ var render = function() {
           _vm._v(" "),
           _c(
             "el-col",
-            { attrs: { span: 8 } },
+            { attrs: { span: 6 } },
             [
               _c("el-card", { attrs: { shadow: "always" } }, [
                 _vm._v("\n        " + _vm._s(_vm.totalTime) + "\n        "),
@@ -136331,7 +136274,19 @@ var render = function() {
         "el-row",
         { staticStyle: { "margin-top": "20px" }, attrs: { gutter: 12 } },
         [
-          _c("el-col", { attrs: { span: 16 } }, [
+          _c("el-col", { attrs: { span: 9 } }, [
+            _c(
+              "ul",
+              _vm._l(_vm.notifications, function(notification) {
+                return _c("li", { key: notification.id }, [
+                  _c("div", [_vm._v(_vm._s(notification.subject.title))])
+                ])
+              }),
+              0
+            )
+          ]),
+          _vm._v(" "),
+          _c("el-col", { attrs: { span: 9 } }, [
             _c(
               "ul",
               _vm._l(_vm.notifications, function(notification) {
@@ -136345,7 +136300,7 @@ var render = function() {
           _vm._v(" "),
           _c(
             "el-col",
-            { attrs: { span: 8 } },
+            { attrs: { span: 6 } },
             [
               _c(
                 "el-table",
@@ -136360,26 +136315,26 @@ var render = function() {
                 },
                 [
                   _c("el-table-column", {
-                    attrs: { prop: "name", label: "Name", width: "120" }
+                    attrs: { prop: "name", label: "Name" }
                   }),
                   _vm._v(" "),
                   _c("el-table-column", {
                     attrs: {
                       prop: "stargazers_count",
                       label: "Stars",
-                      width: "120"
+                      width: "90"
                     }
                   }),
                   _vm._v(" "),
                   _c("el-table-column", {
-                    attrs: { prop: "forks_count", label: "Forks", width: "120" }
+                    attrs: { prop: "forks_count", label: "Forks", width: "90" }
                   }),
                   _vm._v(" "),
                   _c("el-table-column", {
                     attrs: {
                       prop: "watchers_count",
                       label: "Watchers",
-                      width: "120"
+                      width: "90"
                     }
                   })
                 ],
