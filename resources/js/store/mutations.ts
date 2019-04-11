@@ -1,6 +1,8 @@
+import { State } from './state'
+
 const mutations = {
-  UPDATE_REPOSITORIES (state, repos:Array<any>) {
-    state.isLoading = repos
+  UPDATE_REPOSITORIES (state: State, repos:Array<any>) {
+    state.repositories = repos
   },
 }
 

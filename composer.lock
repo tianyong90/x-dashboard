@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a312646e3d4a436bed8a11726d63623c",
+    "content-hash": "dea77324c1825958503a8773df9a10a9",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2919,23 +2919,17 @@
         },
         {
             "name": "mabasic/wakatime-php-api",
-            "version": "2.0.5",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@github.com:mabasic/wakatime-php-api.git",
+                "url": "https://github.com/tianyong90/wakatime-php-api.git",
                 "reference": "0239aa434b59a9a8e3af2110ae1ad76281c24cee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mabasic/wakatime-php-api/zipball/0239aa434b59a9a8e3af2110ae1ad76281c24cee",
+                "url": "https://api.github.com/repos/tianyong90/wakatime-php-api/zipball/0239aa434b59a9a8e3af2110ae1ad76281c24cee",
                 "reference": "0239aa434b59a9a8e3af2110ae1ad76281c24cee",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "guzzlehttp/guzzle": "~6.0",
@@ -2951,13 +2945,12 @@
                     "Mabasic\\WakaTime\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
                 {
-                    "name": "Mario Bašić",
+                    "name": "Mario Basic",
                     "email": "mario.basic@outlook.com"
                 }
             ],
@@ -2967,6 +2960,9 @@
                 "time tracking",
                 "wakatime"
             ],
+            "support": {
+                "source": "https://github.com/tianyong90/wakatime-php-api/tree/2.0.5"
+            },
             "time": "2018-10-21T23:42:26+00:00"
         },
         {
@@ -8832,7 +8828,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "mabasic/wakatime-php-api": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

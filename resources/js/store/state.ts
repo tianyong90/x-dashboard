@@ -1,4 +1,8 @@
-const state = {
+export interface State {
+  repositories: Array<any>
+}
+
+const state: State = {
   repositories: [],
 }
 

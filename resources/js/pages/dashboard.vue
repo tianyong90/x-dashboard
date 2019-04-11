@@ -16,8 +16,8 @@
 
       <el-col :span="6">
         <el-card shadow="always">
-          <span class="title">Total Stars</span>
-          <h3>{{ totalStars }}</h3>
+          <span class="title">Daily Average {{ dialyTimeText }}</span>
+          <div class="chart" id="wakatime_goals" />
         </el-card>
       </el-col>
       <!--      <el-col :span="6">-->
@@ -94,6 +94,8 @@ export default Vue.extend({
       repos: [],
       notifications: {},
       totalTime: '',
+      dialyTimeSeconds: 0,
+      dialyTimeText: '',
     }
   },
 
@@ -140,6 +142,10 @@ export default Vue.extend({
 
       this.totalTime = numeral(totalSeconds).format('00:00:00')
 
+      this.dialyTimeSeconds = totalSeconds / 7
+
+      this.dialyTimeText = numeral(this.dialyTimeSeconds).format('00:00:00')
+
       const sourceData = data.data.map((item: object) => {
         return {
           date: item.range.date,
@@ -147,6 +153,8 @@ export default Vue.extend({
           totalTimeText: item.grand_total.text,
         }
       })
+
+      console.log(totalSeconds)
 
       const chart = new G2.Chart({
         container: 'wakatime_chart',
@@ -177,6 +185,37 @@ export default Vue.extend({
           }
         )
       chart.render()
+
+      const goalsChart = new G2.Chart({
+        container: 'wakatime_goals',
+        forceFit: true,
+        height: 120,
+        padding: [0, 25, 0, 25],
+      })
+
+      goalsChart.source(sourceData)
+      goalsChart.axis('totalSeconds', false)
+
+      goalsChart.tooltip({
+        showTitle: true,
+        useHtml: true,
+        itemTpl: '<li data-index={index}>{time}</li>',
+      })
+
+      goalsChart
+        .interval()
+        .position('date*totalSeconds')
+        .tooltip(
+          'date*totalSeconds*totalTimeText',
+          (date, totalSeconds, totalTimeText) => {
+            return {
+              date: date,
+              time: totalTimeText,
+            }
+          }
+        )
+
+      goalsChart.render()
     })
   },
 
