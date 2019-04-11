@@ -28,7 +28,7 @@
     </el-row>
 
     <el-row :gutter="12" style="margin-top: 20px;">
-      <el-col :span="9">
+      <el-col :span="12">
         <div class="notifications">
           <div
             v-for="(notificationGroup, groupName, index) in notifications"
@@ -50,7 +50,7 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="9">
+      <el-col :span="12">
         <div class="notifications-panel">
           <ul>
             <li v-for="notification in notifications" :key="notification.id">
@@ -59,20 +59,21 @@
           </ul>
         </div>
       </el-col>
-      <el-col :span="6">
-        <el-table :data="repos"
-                  stripe
-                  border
-                  height="500"
-                  style="width: 100%"
-        >
-          <el-table-column prop="name" label="Name" />
-          <el-table-column prop="stargazers_count" label="Stars" width="90" />
-          <el-table-column prop="forks_count" label="Forks" width="90" />
-          <el-table-column prop="watchers_count" label="Watchers" width="90" />
-        </el-table>
-      </el-col>
     </el-row>
+
+    <el-dialog title="Repositories" :visible.sync="dialogVisible">
+      <el-table :data="repos"
+                stripe
+                border
+                height="500"
+                style="width: 100%"
+      >
+        <el-table-column prop="name" label="Name" />
+        <el-table-column prop="stargazers_count" label="Stars" width="90" />
+        <el-table-column prop="forks_count" label="Forks" width="90" />
+        <el-table-column prop="watchers_count" label="Watchers" width="90" />
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -96,6 +97,7 @@ export default Vue.extend({
       totalTime: '',
       dialyTimeSeconds: 0,
       dialyTimeText: '',
+      dialogVisible: true,
     }
   },
 
