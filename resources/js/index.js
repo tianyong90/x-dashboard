@@ -25,19 +25,19 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  store.commit('UPDATE_LOADING', true)
+  // store.commit('UPDATE_LOADING', true)
 
   next()
 })
 
 router.afterEach(() => {
-  store.commit('UPDATE_LOADING', false)
+  // store.commit('UPDATE_LOADING', false)
 })
 
 // axios 请求发送前处理
 axios.interceptors.request.use(
   axiosConfig => {
-    store.commit('UPDATE_LOADING', true)
+    // store.commit('UPDATE_LOADING', true)
 
     const token = window.localStorage.getItem(config.authTokenKey)
     axiosConfig.headers.Authorization = 'Bearer ' + token
@@ -52,7 +52,7 @@ axios.interceptors.request.use(
 // axios 得到响应后处理
 axios.interceptors.response.use(
   response => {
-    store.commit('UPDATE_LOADING', false)
+    // store.commit('UPDATE_LOADING', false)
 
     const newToken = response.headers.authorization
     if (newToken) {
@@ -65,7 +65,7 @@ axios.interceptors.response.use(
     return response
   },
   error => {
-    store.commit('UPDATE_LOADING', false)
+    // store.commit('UPDATE_LOADING', false)
 
     return Promise.reject(error)
   }
@@ -81,9 +81,7 @@ const app = new Vue({
 
   computed: {
     ...mapState({
-      topmenuVisible: state => state.topmenuVisible,
-      sidebarVisible: state => state.sidebarVisible,
-      isLoading: state => state.isLoading,
+      // isLoading: state => state.isLoading,
     }),
   },
 
