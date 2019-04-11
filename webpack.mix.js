@@ -85,7 +85,7 @@ mix.webpackConfig(webpack => {
   }
 })
 
-mix.js('resources/js/index.js', 'js')
+mix.js('resources/js/index.ts', 'js')
 
 mix.sass('resources/sass/app.scss', 'css')
 

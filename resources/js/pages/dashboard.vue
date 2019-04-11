@@ -1,19 +1,25 @@
 <template>
   <div class="main-container">
     <el-row :gutter="12">
-      <el-col :span="5">
-        <el-card shadow="always">
-          <span class="title">Total Stars</span>
-          <h3>{{ totalStars }}</h3>
-        </el-card>
-      </el-col>
+      <!--      <el-col :span="5">-->
+      <!--        <el-card shadow="always">-->
+      <!--          <span class="title">Total Stars</span>-->
+      <!--          <h3>{{ totalStars }}</h3>-->
+      <!--        </el-card>-->
+      <!--      </el-col>-->
 
-      <el-col :span="13">
+      <el-col :span="12">
         <el-card shadow="always">
           <github-calendar />
         </el-card>
       </el-col>
 
+      <el-col :span="6">
+        <el-card shadow="always">
+          {{ totalTime }}
+          <div class="chart" id="wakatime_chart" />
+        </el-card>
+      </el-col>
       <el-col :span="6">
         <el-card shadow="always">
           {{ totalTime }}
@@ -76,6 +82,7 @@ import Vue from 'vue'
 import _ from 'lodash'
 import Octokit from '@octokit/rest'
 import numeral from 'numeral'
+import G2 from '@antv/g2'
 import Calendar from '../components/github-calendar.vue'
 
 export default Vue.extend({
