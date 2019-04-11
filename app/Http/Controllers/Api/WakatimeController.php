@@ -54,4 +54,19 @@ class WakatimeController extends Controller
 
         return response()->json($stats);
     }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * FIXME: 接口 scope 问题，需要使用 oauth
+     */
+    public function goals()
+    {
+        $goals = Cache::remember('wakatime_goals', $this->cacheSeconds, function () {
+            return $this->wakatime->goals();
+        });
+
+        return response()->json($goals);
+    }
+
 }

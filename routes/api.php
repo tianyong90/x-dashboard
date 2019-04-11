@@ -19,5 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('wakatime/summaries', 'Api\WakatimeController@summaries');
 Route::get('wakatime/stats', 'Api\WakatimeController@stats');
+Route::get('wakatime/goals', 'Api\WakatimeController@goals');
 
 Route::get('github/calendar', 'Api\GitHubController@calendar');

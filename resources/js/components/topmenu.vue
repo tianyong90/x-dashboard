@@ -14,8 +14,10 @@
           X-DASHBOARD
         </router-link>
       </el-col>
-      <el-col :span="5" offset="11">
-        <i class="el-icon-star-on" /> 514
+      <el-col :span="5" :offset="11">
+        <div class="icon-items">
+          <i class="el-icon-star-on" /> 514
+        </div>
       </el-col>
     </el-row>
   </el-menu>
@@ -38,5 +40,12 @@ export default {
   height: 40px;
   line-height: 40px;
   padding-left: 1em;
+}
+
+.icon-items {
+  height: 40px;
+  line-height: 40px;
+  text-align: right;
+  padding-right: 2rem;
 }
 </style>

@@ -1,13 +1,6 @@
 <template>
   <div class="main-container">
     <el-row :gutter="12">
-      <!--      <el-col :span="5">-->
-      <!--        <el-card shadow="always">-->
-      <!--          <span class="title">Total Stars</span>-->
-      <!--          <h3>{{ totalStars }}</h3>-->
-      <!--        </el-card>-->
-      <!--      </el-col>-->
-
       <el-col :span="12">
         <el-card shadow="always">
           <github-calendar />
@@ -20,12 +13,18 @@
           <div class="chart" id="wakatime_chart" />
         </el-card>
       </el-col>
+
       <el-col :span="6">
         <el-card shadow="always">
-          {{ totalTime }}
-          <div class="chart" id="wakatime_chart" />
+          <span class="title">Total Stars</span>
+          <h3>{{ totalStars }}</h3>
         </el-card>
       </el-col>
+      <!--      <el-col :span="6">-->
+      <!--        <el-card shadow="always">-->
+      <!--          <div class="chart" id="wakatime_goals_chart" />-->
+      <!--        </el-card>-->
+      <!--      </el-col>-->
     </el-row>
 
     <el-row :gutter="12" style="margin-top: 20px;">
@@ -111,6 +110,11 @@ export default Vue.extend({
       auth: process.env.MIX_GITHUB_OAUTH_TOKEN,
     })
 
+    // TODO: wakatime goals
+    // this.axios.get('wakatime/goals').then((res) => {
+    //   console.log(res)
+    // })
+
     octokit.repos
       .listForUser({
         username: 'tianyong90',
@@ -136,7 +140,7 @@ export default Vue.extend({
 
       this.totalTime = numeral(totalSeconds).format('00:00:00')
 
-      const sourceData = data.data.map(item => {
+      const sourceData = data.data.map((item: object) => {
         return {
           date: item.range.date,
           totalSeconds: item.grand_total.total_seconds,
