@@ -19,7 +19,7 @@
 <div id="app">
     <el-container>
         <el-header height="40px">
-            <topmenu></topmenu>
+            <topmenu :total-stars="totalStars"></topmenu>
         </el-header>
         <el-main>
             <transition name="slide-fade" mode="out-in">

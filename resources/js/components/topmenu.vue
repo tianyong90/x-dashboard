@@ -16,7 +16,7 @@
       </el-col>
       <el-col :span="5" :offset="11">
         <div class="icon-items">
-          <i class="el-icon-star-on" /> 514
+          <i class="el-icon-star-on" /> {{ totalStars }}
         </div>
       </el-col>
     </el-row>
@@ -25,7 +25,12 @@
 
 <script lang="ts">
 export default {
-  computed: {},
+  props: {
+    totalStars: {
+      type: Number,
+      default: 0,
+    },
+  },
 
   methods: {},
 }

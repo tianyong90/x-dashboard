@@ -5,7 +5,7 @@ import VueAxios from 'vue-axios'
 import store from './store/index'
 import routes from './routes'
 import config from './config' // 配置
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import Topmenu from './components/topmenu.vue'
 import ElementUI from 'element-ui'
 
@@ -83,6 +83,8 @@ new Vue({
     ...mapState({
       // isLoading: state => state.isLoading,
     }),
+
+    ...mapGetters(['totalStars']),
   },
 
   data: {
