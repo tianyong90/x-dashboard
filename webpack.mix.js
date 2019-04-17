@@ -78,10 +78,20 @@ mix.webpackConfig(webpack => {
       ],
     },
     resolve: {
-      extensions: ['.js', '.jsx', '.vue', '.ts', '.tsx'],
+      extensions: ['.js', '.vue', '.ts', '.tsx'],
     },
     stats: 'errors-only',
     plugins: plugins,
+    devServer: {
+      proxy: {
+        host: '0.0.0.0', // host machine ip
+        port: 8080,
+      },
+      watchOptions: {
+        aggregateTimeout: 200,
+        poll: 5000
+      },
+    }
   }
 })
 
@@ -106,11 +116,10 @@ if (mix.inProduction()) {
 Mix.listen('configReady', (webpackConfig) => {
   if (Mix.isUsing('hmr')) {
     // Remove leading '/' from entry keys
-    webpackConfig.entry = Object.keys(webpackConfig.entry).
-      reduce((entries, entry) => {
-        entries[entry.replace(/^\//, '')] = webpackConfig.entry[entry]
-        return entries
-      }, {})
+    webpackConfig.entry = Object.keys(webpackConfig.entry).reduce((entries, entry) => {
+      entries[entry.replace(/^\//, '')] = webpackConfig.entry[entry]
+      return entries
+    }, {})
 
     // Remove leading '/' from ExtractTextPlugin instances
     webpackConfig.plugins.forEach((plugin) => {
@@ -123,7 +132,7 @@ Mix.listen('configReady', (webpackConfig) => {
 
 mix.options({
   hmrOptions: {
-    host: 'gh-dashboard.test',
+    host: 'x-dashboard.test',
     port: 8080,
   }
 })
