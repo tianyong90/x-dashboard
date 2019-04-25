@@ -1,0 +1,22 @@
+.feeds-panel {
+  display: block;
+  max-height: calc(100vh - 280px);
+  background-color: #f5f5f5;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  border: 1px solid #ccc;
+}
+
+.feeds-list {
+  display: block;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  .feeds-item {
+    display: flex;
+    background-color: #fff;
+    margin-bottom: 1rem;
+    border: 1px solid #dedede;
+  }
+}

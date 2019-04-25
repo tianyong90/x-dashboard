@@ -104,7 +104,9 @@ export default Vue.extend({
       })
       calendarChart.legend(false)
       calendarChart.tooltip({
-        title: 'date',
+        showTitle: false,
+        useHtml: true,
+        itemTpl: `<li date-index={index}>{count} contribution on {date}</li>`,
       })
       calendarChart.coord().reflect('y')
       calendarChart
@@ -114,6 +116,12 @@ export default Vue.extend({
           return fill
         })
         .shape('boundary-polygon')
+        .tooltip('date*count*day', (date, count, day) => {
+          return {
+            date,
+            count,
+          }
+        })
       calendarChart.render()
     })
   },

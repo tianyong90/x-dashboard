@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use GitHub;
+use GuzzleHttp\Client as GuzzleClient;
 
 class HomeController extends Controller
 {
@@ -12,10 +13,25 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // TODO
-//        $orgs = GitHub::repo();
+//        $client = new GuzzleClient();
 //
-//        dd($orgs);
+//        $response = $client->get('https://api.github.com/feeds', [
+//            'auth' => ['tianyong90', 'tianyong316.']
+//        ]);
+//
+//        $feedsUrls = json_decode($response->getBody()->getContents(), true);
+//
+////        dd($feedsUrls);
+//
+//        $rrr = $client->get($feedsUrls['current_user_url'], [
+//            'headers' => [
+//                'Accept' => 'application/atom+xml',
+//            ],
+//        ]);
+//
+//        dump($rrr->getBody()->getContents());
+//
+//        return;
 
         return view('index');
     }

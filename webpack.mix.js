@@ -5,22 +5,22 @@ const yargs = require('yargs')
 
 const argv = yargs.argv
 
+mix.disableNotifications()
+
 mix.webpackConfig(webpack => {
-  let plugins = [
-    new WebpackBar(),
-  ]
+  let plugins = [new WebpackBar()]
 
   if (mix.inProduction()) {
     // 生产环境中打包时先清理旧的打包文件
     const CleanWebpackPlugin = require('clean-webpack-plugin')
-    plugins.push(new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: [
-        path.join(__dirname, 'public/js'),
-      ],
-      // exclude:  ['shared.js'],
-      verbose: true,
-      dry: false,
-    }))
+    plugins.push(
+      new CleanWebpackPlugin({
+        cleanOnceBeforeBuildPatterns: [path.join(__dirname, 'public/js')],
+        // exclude:  ['shared.js'],
+        verbose: true,
+        dry: false,
+      })
+    )
   }
 
   return {
@@ -43,8 +43,7 @@ mix.webpackConfig(webpack => {
             {
               loader: 'cache-loader',
               options: {
-                cacheDirectory: path.resolve(
-                  './node_modules/.cache/babel-loader'),
+                cacheDirectory: path.resolve('./node_modules/.cache/babel-loader'),
               },
             },
             'thread-loader',
@@ -58,8 +57,7 @@ mix.webpackConfig(webpack => {
             {
               loader: 'cache-loader',
               options: {
-                cacheDirectory: path.resolve(
-                  './node_modules/.cache/babel-loader'),
+                cacheDirectory: path.resolve('./node_modules/.cache/babel-loader'),
               },
             },
             'thread-loader',
@@ -83,15 +81,8 @@ mix.webpackConfig(webpack => {
     stats: 'errors-only',
     plugins: plugins,
     devServer: {
-      proxy: {
-        host: '0.0.0.0', // host machine ip
-        port: 8080,
-      },
-      watchOptions: {
-        aggregateTimeout: 200,
-        poll: 5000
-      },
-    }
+      disableHostCheck: true,
+    },
   }
 })
 
@@ -113,7 +104,7 @@ if (mix.inProduction()) {
   }
 }
 
-Mix.listen('configReady', (webpackConfig) => {
+Mix.listen('configReady', webpackConfig => {
   if (Mix.isUsing('hmr')) {
     // Remove leading '/' from entry keys
     webpackConfig.entry = Object.keys(webpackConfig.entry).reduce((entries, entry) => {
@@ -122,18 +113,11 @@ Mix.listen('configReady', (webpackConfig) => {
     }, {})
 
     // Remove leading '/' from ExtractTextPlugin instances
-    webpackConfig.plugins.forEach((plugin) => {
+    webpackConfig.plugins.forEach(plugin => {
       if (plugin.constructor.name === 'ExtractTextPlugin') {
         plugin.filename = plugin.filename.replace(/^\//, '')
       }
     })
-  }
-})
-
-mix.options({
-  hmrOptions: {
-    host: 'x-dashboard.test',
-    port: 8080,
   }
 })
 
@@ -147,6 +131,7 @@ if (argv.bs) {
     reloadOnRestart: true,
     watchOptions: {
       usePolling: true,
+      interval: 500,
     },
   })
 }

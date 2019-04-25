@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use Goutte\Client;
+use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Cache;
@@ -41,5 +42,33 @@ class GitHubController extends Controller
         });
 
         return response()->json($calendarData);
+    }
+
+    /**
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function currentUserFeeds()
+    {
+        $client = new GuzzleClient();
+
+        $currentUserUrl = Cache::remember('gh_feeds_current_user_url', 120, function () use ($client) {
+            $urlsResponse = $client->get('https://api.github.com/feeds', [
+                'auth' => [config('github.username'), config('github.password')]
+            ]);
+
+            $feedsUrls = json_decode($urlsResponse->getBody()->getContents(), true);
+
+            return $feedsUrls['current_user_url'];
+        });
+
+        $response = Cache::remember('gh_feeds_current_user', 120, function () use ($client, $currentUserUrl) {
+           return $client->get($currentUserUrl, [
+               'headers' => [
+                   'Accept' => 'application/atom+xml',
+               ],
+           ]);
+        });
+
+        return $response;
     }
 }

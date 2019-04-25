@@ -16,7 +16,7 @@
 
       <el-col :span="6">
         <el-card shadow="always">
-          <span class="title">Toady {{ dialyTimeText }}</span>
+          <span class="title">Toady {{ todayTimeText }}</span>
           <div class="chart" id="wakatime_goals" />
         </el-card>
       </el-col>
@@ -24,7 +24,7 @@
 
     <el-row :gutter="12" style="margin-top: 20px;">
       <el-col :span="12">
-        <div class="notifications">
+        <div class="notifications" id="notifications">
           <div
             v-for="(notificationGroup, groupName, index) in notifications"
             :key="index"
@@ -34,11 +34,8 @@
               {{ groupName }}
             </div>
             <ul>
-              <li
-                v-for="notification in notificationGroup"
-                :key="notification.id"
-              >
-                <span>{{ notification.subject.type }}</span>
+              <li v-for="notification in notificationGroup" :key="notification.id">
+                <span class="notification-type">{{ notification.subject.type }}</span>
                 <span>{{ notification.subject.title }}</span>
               </li>
             </ul>
@@ -46,10 +43,12 @@
         </div>
       </el-col>
       <el-col :span="12">
-        <div class="notifications-panel">
-          <ul>
-            <li v-for="notification in notifications" :key="notification.id">
-              <div>hello world</div>
+        <div class="feeds-panel" id="feedsPanel">
+          <ul class="feeds-list" v-if="feedObject.feed && feedObject.feed.entry">
+            <li class="feeds-item" v-for="feed in feedObject.feed.entry" :key="feed.id">
+              <div>{{ feed.title }}</div>
+
+              <div v-html="escape2Html(feed.content)" />
             </li>
           </ul>
         </div>
@@ -79,6 +78,15 @@ import Octokit from '@octokit/rest'
 import numeral from 'numeral'
 import G2 from '@antv/g2'
 import Calendar from '../components/github-calendar.vue'
+import parser from 'fast-xml-parser'
+import $ from 'jquery'
+import '../../sass/feeds-list.scss'
+
+Vue.prototype.escape2Html = (str: string) => {
+  return $('<div/>')
+    .html(str)
+    .text()
+}
 
 export default Vue.extend({
   components: {
@@ -92,8 +100,8 @@ export default Vue.extend({
       totalTime: '',
       todayTimeSeconds: 0,
       dailyTimeSeconds: 0,
-      dialyTimeText: '',
       dialogVisible: false,
+      feedObject: {},
     }
   },
 
@@ -101,6 +109,14 @@ export default Vue.extend({
     // 总 star 数
     totalStars (): number {
       return _.sumBy(this.repos, 'stargazers_count')
+    },
+
+    todayTimeText (): string {
+      return numeral(this.todayTimeSeconds).format('00:00:00')
+    },
+
+    dailyTimeText (): string {
+      return numeral(this.dailyTimeSeconds).format('00:00:00')
     },
   },
 
@@ -110,10 +126,10 @@ export default Vue.extend({
       auth: process.env.MIX_GITHUB_OAUTH_TOKEN,
     })
 
-    // TODO: wakatime goals
-    // this.axios.get('wakatime/goals').then((res) => {
-    //   console.log(res)
-    // })
+    this.axios.get('github/current-user-feeds').then(res => {
+      this.feedObject = parser.parse(res.data, { ignoreNameSpace: true })
+      // console.log(this.feedObject)
+    })
 
     octokit.repos
       .listForUser({
@@ -121,11 +137,7 @@ export default Vue.extend({
         type: 'owner',
       })
       .then(({ data }) => {
-        this.repos = _.orderBy(
-          data,
-          ['stargazers_count', 'forks_count'],
-          'desc'
-        )
+        this.repos = _.orderBy(data, ['stargazers_count', 'forks_count'], 'desc')
       })
 
     octokit.activity.listNotifications().then(({ data }) => {
@@ -142,11 +154,7 @@ export default Vue.extend({
 
       this.dailyTimeSeconds = totalSeconds / 7
 
-      this.dialyTimeText = numeral(this.dailyTimeSeconds).format('00:00:00')
-
       this.todayTimeSeconds = data.data[6].grand_total.total_seconds
-
-      const dailyTimeText = numeral(this.todayTimeSeconds).format('00:00:00')
 
       const sourceData = data.data.map((item: object) => {
         return {
@@ -175,23 +183,34 @@ export default Vue.extend({
       chart
         .interval()
         .position('date*totalSeconds')
-        .tooltip(
-          'date*totalSeconds*totalTimeText',
-          (date, totalSeconds, totalTimeText) => {
-            return {
-              date: date,
-              time: totalTimeText,
-            }
+        .tooltip('date*totalSeconds*totalTimeText', (date: string, totalSeconds: string, totalTimeText: string) => {
+          return {
+            date: date,
+            time: totalTimeText,
           }
-        )
+        })
+
+      chart.guide().line({
+        top: true,
+        start: ['min', this.dailyTimeSeconds],
+        end: ['max', this.dailyTimeSeconds],
+        lineStyle: {
+          stroke: '#8e8e8e',
+          lineWidth: 1,
+          lineDash: [4, 3],
+        },
+      })
+
       chart.render()
 
-      var goalsData = [
+      const todayPercent = Math.round((this.todayTimeSeconds / this.dailyTimeSeconds) * 100, 1)
+
+      const goalsData = [
         {
-          value: 20,
+          value: todayPercent,
         },
       ]
-      var goalsChart = new G2.Chart({
+      const goalsChart = new G2.Chart({
         container: 'wakatime_goals',
         forceFit: true,
         height: 120,
@@ -229,12 +248,13 @@ export default Vue.extend({
           lineWidth: 18,
         },
       })
+
       // 绘制指标
       goalsChart.guide().arc({
         start: [0, 0.965],
-        end: [Math.min(100, goalsData[0].value), 0.965],
+        end: [todayPercent, 0.965],
         style: {
-          stroke: '#1890FF',
+          stroke: todayPercent < 60 ? '#ff8e24' : '#1890FF',
           lineWidth: 20,
         },
       })
@@ -244,7 +264,7 @@ export default Vue.extend({
         html: `<div style="text-align: center;">
 <p style="font-size: 16px;color: #545454;margin: 0;">
 ${goalsData[0].value} %</p>
-<p>Daily Average ${dailyTimeText}</p>
+<p>Daily Average ${this.dailyTimeText}</p>
 </div>`,
       })
 
@@ -274,6 +294,10 @@ ${goalsData[0].value} %</p>
 
 .notifications {
   display: block;
+  height: calc(100vh - 250px);
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
 
   .notification-group-panel {
     display: block;
@@ -298,6 +322,10 @@ ${goalsData[0].value} %</p>
     li {
       display: flex;
       padding: 0.25rem 1rem;
+    }
+
+    .notification-type {
+      margin-right: 1em;
     }
   }
 }
