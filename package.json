@@ -61,6 +61,7 @@
         "eslint-plugin-vue": "^5.0.0",
         "fast-xml-parser": "^3.12.16",
         "friendly-errors-webpack-plugin": "^1.6.1",
+        "graphql": "^14.3.1",
         "husky": "^2.1.0",
         "jquery": "^3.4.0",
         "js-cookie": "^2.2.0",
