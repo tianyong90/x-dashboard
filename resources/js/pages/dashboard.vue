@@ -81,6 +81,7 @@ import Calendar from '../components/github-calendar.vue'
 import parser from 'fast-xml-parser'
 import $ from 'jquery'
 import '../../sass/feeds-list.scss'
+import axios from 'axios'
 
 Vue.prototype.escape2Html = (str: string) => {
   return $('<div/>')
@@ -121,6 +122,42 @@ export default Vue.extend({
   },
 
   mounted () {
+    const query = `
+    {
+  user (login: "tianyong90") {
+    name
+    avatarUrl
+    location
+    repository (name: "we-vue") {
+      stargazers (last: 100) {
+        totalCount
+      }
+    }
+    repositories (last: 100, isFork: false) {
+      totalCount
+      nodes {
+        name
+        stargazers (last: 1) {
+          totalCount
+        }
+      }
+    }
+\t}
+}
+    `
+
+    // axios.post('https://api.github.com/graphql', query, {
+    //   headers: {
+    //     'Authorication': 'Bearer 1b3c73c682d2587e23557a1e0c2049bf42eb7930'
+    //   }
+    // }).then(res => {
+    //   console.log(res)
+    // }).catch(error => {
+    //   console.log(error)
+    // })
+
+    return
+
     const octokit = new Octokit({
       // log: console,
       auth: process.env.MIX_GITHUB_OAUTH_TOKEN,
