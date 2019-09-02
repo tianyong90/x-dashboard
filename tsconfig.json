@@ -1,20 +1,30 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "target": "es5",
-    "strict": true,
-    "jsx": "preserve",
-    "importHelpers": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
-    "sourceMap": true
-  },
-  "include": [
-    "./resources/js/**/*"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+    "compilerOptions": {
+        "module": "esnext",
+        "target": "esnext",
+        "allowJs": true,
+        "sourceMap": true,
+        "strict": false,
+        "noUnusedLocals": false,
+        "noImplicitReturns": true,
+        "noImplicitAny": false,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "importHelpers": true,
+        "declaration": false,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "noEmit": true,
+        "baseUrl": ".",
+        "paths": {
+            "~/*": ["resources/js/*"]
+        }
+    },
+    "include": [
+        "resources/js/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
 }

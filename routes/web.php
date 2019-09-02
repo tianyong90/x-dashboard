@@ -11,4 +11,4 @@
 |
 */
 
-Route::get('/', view('index'));
+Route::view('/', 'index');

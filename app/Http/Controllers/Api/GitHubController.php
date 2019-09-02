@@ -28,7 +28,7 @@ class GitHubController extends Controller
             $crawler->filter('svg.js-calendar-graph-svg > g > g')
                 ->each(function ($node, $weekIndex) use (&$result) {
                     $node->filter('rect.day')->each(function ($dayRect, $index) use (&$result, $weekIndex) {
-                        array_push($result, [
+                        \Arr::push($result, [
                             'date' => $dayRect->attr('data-date'),
                             'fill' => $dayRect->attr('fill'),
                             'count' => $dayRect->attr('data-count'),

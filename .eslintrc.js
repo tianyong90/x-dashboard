@@ -1,9 +1,7 @@
 module.exports = {
   root: true,
   parserOptions: {
-    parser: 'babel-eslint',
-    ecmaVersion: 6,
-    sourceType: 'module',
+    parser: '@typescript-eslint/parser'
   },
   env: {
     es6: true,
@@ -14,9 +12,12 @@ module.exports = {
     'plugin:vue/strongly-recommended',
     'standard',
   ],
+  plugins: [
+    '@typescript-eslint'
+  ],
   rules: {
     'vue/html-indent': ['error', 2, { 'attribute': 1 }],
-    // 'vue/script-indent': ['error', 2, {'baseIndent': 1}],
+    'vue/script-indent': ['error', 2, {'baseIndent': 0}],
     'vue/jsx-uses-vars': 'error',
     'vue/require-v-for-key': 'off',
     'vue/require-default-prop': 'off',
@@ -27,7 +28,7 @@ module.exports = {
         'singleline': 3,
         'multiline': {
           'max': 1,
-          'allowFirstLine': true,
+          'allowFirstLine': false,
         },
       }],
     'vue/component-name-in-template-casing': [
@@ -41,5 +42,27 @@ module.exports = {
     'no-new': 'off',
     'no-unused-vars': 'off',
     'comma-dangle': ['warn', 'always-multiline'],
+    'camelcase': 'off',
   },
+  overrides: [
+    {
+      files: ['**/*.ts', '**/*.tsx'],
+      rules: {
+        'import/export': 'off',
+        'no-unused-vars': 'off',
+        '@typescript-eslint/prefer-namespace-keyword': 'error',
+        '@typescript-eslint/adjacent-overload-signatures': 'error',
+        '@typescript-eslint/member-delimiter-style': ['error', {
+          multiline: {
+            delimiter: 'none'
+          },
+          singleline: {
+            delimiter: 'comma'
+          }
+        }],
+        '@typescript-eslint/member-ordering': 'off',
+        '@typescript-eslint/type-annotation-spacing': 'error',
+      }
+    }
+  ],
 }

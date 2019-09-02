@@ -1,7 +1,4 @@
 module.exports = function (api) {
-  const { BABEL_MODULE, NODE_ENV } = process.env
-  const useESModules = BABEL_MODULE !== 'commonjs' && NODE_ENV !== 'test'
-
   api && api.cache(false)
 
   return {
@@ -9,19 +6,10 @@ module.exports = function (api) {
       [
         '@babel/preset-env',
         {
-          targets: {
-            browsers: ['>0.5%', 'last 2 versions', 'not dead', 'not op_mini all'],
-            node: 8,
-          },
-          modules: useESModules ? false : 'commonjs',
+          loose: true,
+          modules: 'commonjs',
         },
       ],
-      // [
-      //   '@vue/babel-preset-jsx',
-      //   {
-      //     functional: false,
-      //   },
-      // ],
     ],
     plugins: [
       [
@@ -29,11 +17,13 @@ module.exports = function (api) {
         {
           corejs: false,
           helpers: true,
-          regenerator: false,
-          useESModules,
+          regenerator: true,
+          useESModules: false,
         },
       ],
+      '@babel/plugin-proposal-class-properties',
       '@babel/plugin-syntax-dynamic-import',
-    ]
+      '@babel/plugin-transform-object-assign',
+    ],
   }
 }
