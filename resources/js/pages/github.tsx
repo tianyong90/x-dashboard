@@ -61,7 +61,7 @@ export default class App extends Component<State> {
     this.setState({ isLoadingRepos: true })
     octokit.repos
     .listForUser({
-      username: 'tianyong90',
+      username: process.env.GITHUB_USERNAME,
       type: 'owner',
     })
     .then(({ data }) => {
