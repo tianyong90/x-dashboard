@@ -7,7 +7,7 @@ const purgecss = Purgecss({
   // Specify the paths to all of the template files in your project
   content: [
     './resources/**/*.html',
-    './resources/**/*.vue',
+    './resources/**/*.tsx',
     // etc.
   ],
 
@@ -16,7 +16,7 @@ const purgecss = Purgecss({
   whitelist: ['html', 'body'],
   // 不处理的样式
   // element-ui, mdi, nprogress
-  whitelistPatternsChildren: [/^el-/, /^v-/, /^mdi/, /^nprogress/, /^vxe/],
+  whitelistPatternsChildren: [/^ant/, /^v-/, /^nprogress/],
 })
 
 module.exports = {
