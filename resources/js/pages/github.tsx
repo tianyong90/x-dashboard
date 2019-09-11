@@ -35,8 +35,8 @@ export default class App extends Component<State> {
 
   componentDidMount (): void {
     const octokit = new Octokit({
-      // log: console,
-      auth: process.env.GITHUB_OAUTH_TOKEN,
+      log: console,
+      auth: `token ${process.env.GITHUB_OAUTH_TOKEN}`,
     })
 
     // 获取 feed
