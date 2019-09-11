@@ -20,8 +20,10 @@ class GitHubController extends Controller
     public function calendar()
     {
         $calendarData = Cache::remember('github_calendar_date', 120, function () {
+            $username = config('github.connections.other.username');
+
             $client = new Client();
-            $crawler = $client->request('GET', 'https://github.com/users/tianyong90/contributions');
+            $crawler = $client->request('GET', "https://github.com/users/{$username}/contributions");
 
             $result = [];
 
