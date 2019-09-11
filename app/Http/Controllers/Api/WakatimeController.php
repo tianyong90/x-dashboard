@@ -32,6 +32,8 @@ class WakatimeController extends Controller
     }
 
     /**
+     * 7 天内按第天的总结数据
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function summaries()
@@ -44,6 +46,8 @@ class WakatimeController extends Controller
     }
 
     /**
+     * 7 天内（总计）统计数据
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function stats()
@@ -56,9 +60,9 @@ class WakatimeController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * 今日目标
      *
-     * FIXME: 接口 scope 问题，需要使用 oauth
+     * @return \Illuminate\Http\JsonResponse
      */
     public function goals()
     {

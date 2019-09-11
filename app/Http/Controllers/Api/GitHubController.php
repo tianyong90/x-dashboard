@@ -28,7 +28,7 @@ class GitHubController extends Controller
             $crawler->filter('svg.js-calendar-graph-svg > g > g')
                 ->each(function ($node, $weekIndex) use (&$result) {
                     $node->filter('rect.day')->each(function ($dayRect, $index) use (&$result, $weekIndex) {
-                        \Arr::push($result, [
+                        array_push($result, [
                             'date' => $dayRect->attr('data-date'),
                             'fill' => $dayRect->attr('fill'),
                             'count' => $dayRect->attr('data-count'),
@@ -45,15 +45,18 @@ class GitHubController extends Controller
     }
 
     /**
+     * user private feed url
+     *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function currentUserFeeds()
+    public function privateFeedUrl()
     {
         $client = new GuzzleClient();
 
+        // current_user_url 只有在 basic 授权模式下可获取
         $currentUserUrl = Cache::remember('gh_feeds_current_user_url', 120, function () use ($client) {
             $urlsResponse = $client->get('https://api.github.com/feeds', [
-                'auth' => [config('github.username'), config('github.password')]
+                'auth' => [config('github.connections.other.username'), config('github.connections.other.password')]
             ]);
 
             $feedsUrls = json_decode($urlsResponse->getBody()->getContents(), true);
@@ -61,14 +64,6 @@ class GitHubController extends Controller
             return $feedsUrls['current_user_url'];
         });
 
-        $response = Cache::remember('gh_feeds_current_user', 120, function () use ($client, $currentUserUrl) {
-           return $client->get($currentUserUrl, [
-               'headers' => [
-                   'Accept' => 'application/atom+xml',
-               ],
-           ]);
-        });
-
-        return $response;
+        return $currentUserUrl;
     }
 }

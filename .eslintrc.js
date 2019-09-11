@@ -1,40 +1,27 @@
 module.exports = {
-  root: true,
-  parserOptions: {
-    parser: '@typescript-eslint/parser'
+  'env': {
+    'browser': true,
+    'es6': true,
+    'node': true
   },
-  env: {
-    es6: true,
-    browser: true,
-    node: true,
+  'extends': 'standard',
+  'globals': {
+    'Atomics': 'readonly',
+    'SharedArrayBuffer': 'readonly'
   },
-  extends: [
-    'plugin:vue/strongly-recommended',
-    'standard',
+  'parser': '@typescript-eslint/parser',
+  'parserOptions': {
+    'ecmaFeatures': {
+      'jsx': true
+    },
+    'ecmaVersion': 2018,
+    'sourceType': 'module'
+  },
+  'plugins': [
+    '@typescript-eslint',
+    'react'
   ],
-  plugins: [
-    '@typescript-eslint'
-  ],
-  rules: {
-    'vue/html-indent': ['error', 2, { 'attribute': 1 }],
-    'vue/script-indent': ['error', 2, {'baseIndent': 0}],
-    'vue/jsx-uses-vars': 'error',
-    'vue/require-v-for-key': 'off',
-    'vue/require-default-prop': 'off',
-    'vue/name-property-casing': 'off',
-    'vue/no-unused-vars': 'off',
-    'vue/max-attributes-per-line': [
-      'error', {
-        'singleline': 3,
-        'multiline': {
-          'max': 1,
-          'allowFirstLine': false,
-        },
-      }],
-    'vue/component-name-in-template-casing': [
-      'error', 'kebab-case', {
-        'ignores': [],
-      }],
+  'rules': {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-useless-escape': 'off',
     'indent': 'off',
@@ -64,5 +51,5 @@ module.exports = {
         '@typescript-eslint/type-annotation-spacing': 'error',
       }
     }
-  ],
+  ]
 }

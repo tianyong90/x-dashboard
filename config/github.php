@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 return [
 
-    'username' => env('GITHUB_USERNAME'),
-    'password' => env('GITHUB_PASSWORD'),
-
     /*
     |--------------------------------------------------------------------------
     | Default Connection Name
@@ -72,8 +69,8 @@ return [
         ],
 
         'other' => [
-            'username'   => 'your-username',
-            'password'   => 'your-password',
+            'username'   => env('GITHUB_USERNAME'),
+            'password'   => env('GITHUB_PASSWORD'),
             'method'     => 'password',
             // 'backoff'    => false,
             // 'cache'      => false,

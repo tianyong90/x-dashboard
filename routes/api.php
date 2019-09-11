@@ -22,4 +22,4 @@ Route::get('wakatime/stats', 'Api\WakatimeController@stats');
 Route::get('wakatime/goals', 'Api\WakatimeController@goals');
 
 Route::get('github/calendar', 'Api\GitHubController@calendar');
-Route::get('github/current-user-feeds', 'Api\GitHubController@currentUserFeeds');
+Route::get('github/private-feed-url', 'Api\GitHubController@privateFeedUrl');

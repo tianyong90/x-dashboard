@@ -2,6 +2,7 @@ const Encore = require('@symfony/webpack-encore')
 const path = require('path')
 const fs = require('fs')
 const WebpackBar = require('webpackbar')
+const Dotenv = require('dotenv-webpack')
 
 Encore
   // directory where compiled assets will be stored
@@ -9,7 +10,7 @@ Encore
   // public path used by the web server to access the output path
   .setPublicPath('/js')
 
-  .addEntry('app', './resources/js/app.js')
+  .addEntry('app', './resources/js/index.tsx')
 
   // will require an extra script tag for runtime.js
   // but, you probably want this, unless you're building a single-page app
@@ -22,8 +23,8 @@ Encore
   .enableVersioning(Encore.isProduction())
 
   .enableBuildNotifications()
-  .enableVueLoader()
   .enableTypeScriptLoader()
+  .enableReactPreset()
   .enableForkedTypeScriptTypesChecking(() => ({
     // 限制生产构建时使用的内存大小，防止在生产机上构建占用过多内存
     memoryLimit: process.env.NODE_ENV === 'production' ? 1024 : 2048,
@@ -38,6 +39,7 @@ Encore
   .enablePostCssLoader()
   .configureFriendlyErrorsPlugin()
   .addPlugin(new WebpackBar())
+  .addPlugin(new Dotenv())
 
   // 增加 resolve.alias
   .addAliases({
