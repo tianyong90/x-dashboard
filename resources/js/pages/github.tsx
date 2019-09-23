@@ -34,7 +34,7 @@ export default class App extends Component<State> {
     }
   }
 
-  async componentDidMount (): void {
+  async componentDidMount () {
     const graphqlWithAuth = graphql.defaults({
       headers: {
         authorization: `token ${process.env.GITHUB_OAUTH_TOKEN}`,
@@ -77,6 +77,7 @@ export default class App extends Component<State> {
       auth: `token ${process.env.GITHUB_OAUTH_TOKEN}`,
     })
 
+    // 此接口 graphql （V4）中尚无合适的替换
     octokit.activity.listNotifications().then(({ data }) => {
       const notifications = groupBy(data, item => {
         return item.repository.full_name
