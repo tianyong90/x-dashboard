@@ -5,6 +5,7 @@ import { groupBy, orderBy } from 'lodash'
 import axios from 'axios'
 import GithubCalendar from '../components/github-calendar'
 import Parser from 'rss-parser'
+import { graphql } from '@octokit/graphql'
 
 const { Content } = Layout
 
@@ -33,10 +34,57 @@ export default class App extends Component<State> {
     }
   }
 
-  componentDidMount (): void {
+  async componentDidMount (): void {
+    const graphqlWithAuth = graphql.defaults({
+      headers: {
+        authorization: `token ${process.env.GITHUB_OAUTH_TOKEN}`,
+      },
+    })
+
+    const res = await graphqlWithAuth(
+      `
+    {
+  user (login: "tianyong90") {
+    name
+    avatarUrl
+    location
+    repositories (last: 100, ownerAffiliations: OWNER, isFork: false, orderBy: {direction: DESC, field: STARGAZERS}) {
+      totalCount
+      nodes {
+        name
+        url
+        description
+        stargazers (last: 1) {
+          totalCount
+        }
+        forks (last: 1) {
+          totalCount
+        }
+        watchers (last: 1) {
+          totalCount
+        }
+      }
+    }
+  }
+}
+  `
+    )
+
+    this.setState({ repos: res.user.repositories.nodes })
+
     const octokit = new Octokit({
       log: console,
       auth: `token ${process.env.GITHUB_OAUTH_TOKEN}`,
+    })
+
+    octokit.activity.listNotifications().then(({ data }) => {
+      const notifications = groupBy(data, item => {
+        return item.repository.full_name
+      })
+
+      console.log(notifications)
+
+      this.setState({ notifications })
     })
 
     // 获取 feed
@@ -56,29 +104,6 @@ export default class App extends Component<State> {
         }
         this.setState({ feed })
       })
-    })
-
-    this.setState({ isLoadingRepos: true })
-    octokit.repos
-    .listForUser({
-      username: process.env.GITHUB_USERNAME,
-      type: 'owner',
-    })
-    .then(({ data }) => {
-      this.setState({ isLoadingRepos: false })
-      const repos = orderBy(data, ['stargazers_count', 'forks_count'], 'desc')
-
-      this.setState({ repos })
-    })
-
-    octokit.activity.listNotifications().then(({ data }) => {
-      const notifications = groupBy(data, item => {
-        return item.repository.full_name
-      })
-
-      console.log(notifications)
-
-      this.setState({ notifications })
     })
   }
 
@@ -159,18 +184,27 @@ export default class App extends Component<State> {
                 />
                 <Column
                   title="Stars"
-                  dataIndex="stargazers_count"
-                  key="stargazers_count"
+                  dataIndex="stargazers"
+                  key="stargazers"
+                  render={stargazers => (
+                    <span>{ stargazers.totalCount }</span>
+                  )}
                 />
                 <Column
                   title="Forks"
-                  dataIndex="forks_count"
-                  key="forks_count"
+                  dataIndex="forks"
+                  key="forks"
+                  render={forks => (
+                    <span>{ forks.totalCount }</span>
+                  )}
                 />
                 <Column
                   title="Watchers"
-                  dataIndex="watchers_count"
-                  key="watchers_count"
+                  dataIndex="watchers"
+                  key="watchers"
+                  render={watchers => (
+                    <span>{ watchers.totalCount }</span>
+                  )}
                 />
               </Table>
 
