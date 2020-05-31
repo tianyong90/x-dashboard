@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8f77c56d985b9e62fc6f35fb07030bcf",
+    "content-hash": "4471295b3707c179dbd7045cd2172cab",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -134,16 +134,16 @@
         },
         {
             "name": "barryvdh/laravel-ide-helper",
-            "version": "v2.6.4",
+            "version": "v2.6.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/barryvdh/laravel-ide-helper.git",
-                "reference": "16eb4f65ee0d51b1f1182d56ae28ee00a70ce75a"
+                "reference": "8740a9a158d3dd5cfc706a9d4cc1bf7a518f99f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/barryvdh/laravel-ide-helper/zipball/16eb4f65ee0d51b1f1182d56ae28ee00a70ce75a",
-                "reference": "16eb4f65ee0d51b1f1182d56ae28ee00a70ce75a",
+                "url": "https://api.github.com/repos/barryvdh/laravel-ide-helper/zipball/8740a9a158d3dd5cfc706a9d4cc1bf7a518f99f3",
+                "reference": "8740a9a158d3dd5cfc706a9d4cc1bf7a518f99f3",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -155,22 +155,19 @@
             "require": {
                 "barryvdh/reflection-docblock": "^2.0.6",
                 "composer/composer": "^1.6",
+                "doctrine/dbal": "~2.3",
                 "illuminate/console": "^5.5|^6",
                 "illuminate/filesystem": "^5.5|^6",
                 "illuminate/support": "^5.5|^6",
                 "php": ">=7"
             },
             "require-dev": {
-                "doctrine/dbal": "~2.3",
                 "illuminate/config": "^5.5|^6",
                 "illuminate/view": "^5.5|^6",
                 "phpro/grumphp": "^0.14",
                 "phpunit/phpunit": "4.*",
                 "scrutinizer/ocular": "~1.1",
                 "squizlabs/php_codesniffer": "^3"
-            },
-            "suggest": {
-                "doctrine/dbal": "Load information from the database about models for phpdocs (~2.3)"
             },
             "type": "library",
             "extra": {
@@ -210,7 +207,7 @@
                 "phpstorm",
                 "sublime"
             ],
-            "time": "2019-09-03T17:51:13+00:00"
+            "time": "2019-09-08T09:56:38+00:00"
         },
         {
             "name": "barryvdh/reflection-docblock",
@@ -2212,16 +2209,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v6.0.0",
+            "version": "v6.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "89c81d4dc37714d82521d05dc003b26b2a86defc"
+                "reference": "56789e9dec750e0fbe8e9e6ae90a01a4e6887902"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/89c81d4dc37714d82521d05dc003b26b2a86defc",
-                "reference": "89c81d4dc37714d82521d05dc003b26b2a86defc",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/56789e9dec750e0fbe8e9e6ae90a01a4e6887902",
+                "reference": "56789e9dec750e0fbe8e9e6ae90a01a4e6887902",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2324,8 +2321,8 @@
                 "moontoast/math": "Required to use ordered UUIDs (^1.1).",
                 "pda/pheanstalk": "Required to use the beanstalk queue driver (^4.0).",
                 "pusher/pusher-php-server": "Required to use the Pusher broadcast driver (^3.0).",
-                "symfony/cache": "Required to PSR-6 cache bridge (^4.3).",
-                "symfony/psr-http-message-bridge": "Required to use PSR-7 bridging features (^1.1).",
+                "symfony/cache": "Required to PSR-6 cache bridge (^4.3.4).",
+                "symfony/psr-http-message-bridge": "Required to use PSR-7 bridging features (^1.2).",
                 "wildbit/swiftmailer-postmark": "Required to use Postmark mail driver (^3.0)."
             },
             "type": "library",
@@ -2359,20 +2356,20 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2019-09-03T13:09:57+00:00"
+            "time": "2019-09-10T18:46:24+00:00"
         },
         {
             "name": "laravel/passport",
-            "version": "v7.4.0",
+            "version": "v7.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/passport.git",
-                "reference": "4460bd1fb5d913d75e547caf02a5a19c6d77794d"
+                "reference": "cc39dc6a36ebf5926906eb5ad3c62dba50c9bbd0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/passport/zipball/4460bd1fb5d913d75e547caf02a5a19c6d77794d",
-                "reference": "4460bd1fb5d913d75e547caf02a5a19c6d77794d",
+                "url": "https://api.github.com/repos/laravel/passport/zipball/cc39dc6a36ebf5926906eb5ad3c62dba50c9bbd0",
+                "reference": "cc39dc6a36ebf5926906eb5ad3c62dba50c9bbd0",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2385,15 +2382,15 @@
                 "ext-json": "*",
                 "firebase/php-jwt": "~3.0|~4.0|~5.0",
                 "guzzlehttp/guzzle": "~6.0",
-                "illuminate/auth": "~5.6.0|~5.7.0|~5.8.0|^6.0",
-                "illuminate/console": "~5.6.0|~5.7.0|~5.8.0|^6.0",
-                "illuminate/container": "~5.6.0|~5.7.0|~5.8.0|^6.0",
-                "illuminate/contracts": "~5.6.0|~5.7.0|~5.8.0|^6.0",
-                "illuminate/cookie": "~5.6.0|~5.7.0|~5.8.0|^6.0",
-                "illuminate/database": "~5.6.0|~5.7.0|~5.8.0|^6.0",
-                "illuminate/encryption": "~5.6.0|~5.7.0|~5.8.0|^6.0",
-                "illuminate/http": "~5.6.0|~5.7.0|~5.8.0|^6.0",
-                "illuminate/support": "~5.6.0|~5.7.0|~5.8.0|^6.0",
+                "illuminate/auth": "~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0",
+                "illuminate/console": "~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0",
+                "illuminate/container": "~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0",
+                "illuminate/contracts": "~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0",
+                "illuminate/cookie": "~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0",
+                "illuminate/database": "~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0",
+                "illuminate/encryption": "~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0",
+                "illuminate/http": "~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0",
+                "illuminate/support": "~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0",
                 "league/oauth2-server": "^7.0",
                 "php": ">=7.1",
                 "phpseclib/phpseclib": "^2.0",
@@ -2401,8 +2398,8 @@
                 "zendframework/zend-diactoros": "~1.0|~2.0"
             },
             "require-dev": {
-                "mockery/mockery": "~1.0",
-                "phpunit/phpunit": "~7.4"
+                "mockery/mockery": "^1.0",
+                "phpunit/phpunit": "^7.4|^8.0"
             },
             "type": "library",
             "extra": {
@@ -2436,7 +2433,7 @@
                 "oauth",
                 "passport"
             ],
-            "time": "2019-08-20T18:10:43+00:00"
+            "time": "2019-09-10T19:55:34+00:00"
         },
         {
             "name": "laravel/telescope",
@@ -6826,16 +6823,16 @@
         },
         {
             "name": "vlucas/phpdotenv",
-            "version": "v3.5.0",
+            "version": "v3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vlucas/phpdotenv.git",
-                "reference": "95cb0fa6c025f7f0db7fc60f81e9fb231eb2d222"
+                "reference": "1bdf24f065975594f6a117f0f1f6cabf1333b156"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/95cb0fa6c025f7f0db7fc60f81e9fb231eb2d222",
-                "reference": "95cb0fa6c025f7f0db7fc60f81e9fb231eb2d222",
+                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/1bdf24f065975594f6a117f0f1f6cabf1333b156",
+                "reference": "1bdf24f065975594f6a117f0f1f6cabf1333b156",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -6850,12 +6847,12 @@
                 "symfony/polyfill-ctype": "^1.9"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8.35 || ^5.0 || ^6.0"
+                "phpunit/phpunit": "^4.8.35 || ^5.0 || ^6.0 || ^7.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.5-dev"
+                    "dev-master": "3.6-dev"
                 }
             },
             "autoload": {
@@ -6885,7 +6882,7 @@
                 "env",
                 "environment"
             ],
-            "time": "2019-08-27T17:00:38+00:00"
+            "time": "2019-09-10T21:37:39+00:00"
         },
         {
             "name": "zendframework/zend-diactoros",
@@ -7025,16 +7022,16 @@
         },
         {
             "name": "facade/flare-client-php",
-            "version": "1.0.1",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/facade/flare-client-php.git",
-                "reference": "6c3509372c20255ac19b3b5583216daea0c2f992"
+                "reference": "7128b251b48f24ef64e5cddd7f8d40cc3a06fd3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facade/flare-client-php/zipball/6c3509372c20255ac19b3b5583216daea0c2f992",
-                "reference": "6c3509372c20255ac19b3b5583216daea0c2f992",
+                "url": "https://api.github.com/repos/facade/flare-client-php/zipball/7128b251b48f24ef64e5cddd7f8d40cc3a06fd3e",
+                "reference": "7128b251b48f24ef64e5cddd7f8d40cc3a06fd3e",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -7081,20 +7078,20 @@
                 "flare",
                 "reporting"
             ],
-            "time": "2019-09-02T18:43:12+00:00"
+            "time": "2019-09-11T14:19:56+00:00"
         },
         {
             "name": "facade/ignition",
-            "version": "1.4.5",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/facade/ignition.git",
-                "reference": "c210671197f6f8761c6ed0a765941940c474484c"
+                "reference": "36a1e4ca0973ac8e5c8289ee31956bbaf8e6bb67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facade/ignition/zipball/c210671197f6f8761c6ed0a765941940c474484c",
-                "reference": "c210671197f6f8761c6ed0a765941940c474484c",
+                "url": "https://api.github.com/repos/facade/ignition/zipball/36a1e4ca0973ac8e5c8289ee31956bbaf8e6bb67",
+                "reference": "36a1e4ca0973ac8e5c8289ee31956bbaf8e6bb67",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -7108,18 +7105,18 @@
                 "ext-mbstring": "*",
                 "facade/flare-client-php": "^1.0",
                 "facade/ignition-contracts": "^1.0",
-                "filp/whoops": "^2.1.4",
-                "illuminate/support": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0",
-                "monolog/monolog": "^1.12|^2.0",
+                "filp/whoops": "^2.4",
+                "illuminate/support": "~5.5.0 || ~5.6.0 || ~5.7.0 || ~5.8.0 || ^6.0",
+                "monolog/monolog": "^1.12 || ^2.0",
                 "php": "^7.1",
                 "scrivo/highlight.php": "^9.15",
-                "symfony/console": "^3.4|^4.0",
-                "symfony/var-dumper": "^3.4|^4.0"
+                "symfony/console": "^3.4 || ^4.0",
+                "symfony/var-dumper": "^3.4 || ^4.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^2.14",
                 "mockery/mockery": "^1.2",
-                "orchestra/testbench": "^3.5|^3.6|^3.7|^3.8|^4.0"
+                "orchestra/testbench": "^3.5 || ^3.6 || ^3.7 || ^3.8 || ^4.0"
             },
             "suggest": {
                 "laravel/telescope": "^2.0"
@@ -7147,7 +7144,7 @@
             "license": [
                 "MIT"
             ],
-            "description": "A beautiful error page for Laravel apps",
+            "description": "A beautiful error page for Laravel applications.",
             "homepage": "https://github.com/facade/ignition",
             "keywords": [
                 "error",
@@ -7155,7 +7152,7 @@
                 "laravel",
                 "page"
             ],
-            "time": "2019-09-03T21:12:03+00:00"
+            "time": "2019-09-09T14:06:15+00:00"
         },
         {
             "name": "facade/ignition-contracts",
@@ -7332,16 +7329,16 @@
         },
         {
             "name": "garygreen/pretty-routes",
-            "version": "1.0.5",
+            "version": "1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/garygreen/pretty-routes.git",
-                "reference": "48ea54afb8b667518d12d20f837ff8f811627a26"
+                "reference": "b2889e974fb1a685e45c93c78e426ee890fbe13d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/garygreen/pretty-routes/zipball/48ea54afb8b667518d12d20f837ff8f811627a26",
-                "reference": "48ea54afb8b667518d12d20f837ff8f811627a26",
+                "url": "https://api.github.com/repos/garygreen/pretty-routes/zipball/b2889e974fb1a685e45c93c78e426ee890fbe13d",
+                "reference": "b2889e974fb1a685e45c93c78e426ee890fbe13d",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -7377,7 +7374,7 @@
                 }
             ],
             "description": "Pretty routes for Laravel 5.",
-            "time": "2019-09-03T19:08:34+00:00"
+            "time": "2019-09-05T12:26:25+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",

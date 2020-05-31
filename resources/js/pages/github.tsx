@@ -76,8 +76,6 @@ export default class App extends Component<State> {
         return item.repository.full_name
       })
 
-      console.log(notifications)
-
       this.setState({ notifications })
     })
   }
